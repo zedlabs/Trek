@@ -1,8 +1,10 @@
 package ml.zedlabs.tvtracker
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,16 +24,43 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dagger.hilt.android.AndroidEntryPoint
+import ml.zedlabs.domain.model.Resource
 import ml.zedlabs.tvtracker.ui.theme.TvTrackerTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    val mainViewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initObserver()
+        mainViewModel.getTopRatedMovies()
         setContent {
             TvTrackerTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     Greeting("Android")
+                }
+            }
+        }
+    }
+
+    fun initObserver() {
+        mainViewModel.topRatedMovieListLiveData.observe(this) {
+            when(it) {
+                is Resource.Error -> {
+
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Success -> {
+                    val t = it.data
+                    t?.results?.forEach { res ->
+
+                    }
                 }
             }
         }

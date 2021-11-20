@@ -4,6 +4,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ml.zedlabs.data.network.JsonApi
+import ml.zedlabs.data.network.MovieApi
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -25,7 +26,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofitInstance(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("")
+            .baseUrl("https://api.themoviedb.org/")
             .addConverterFactory(MoshiConverterFactory.create())
             .client(okHttpClient)
             .build()
@@ -35,6 +36,12 @@ object NetworkModule {
     @Singleton
     fun providesJsonApi(retrofit: Retrofit): JsonApi {
         return retrofit.create(JsonApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesMovieApi(retrofit: Retrofit): MovieApi {
+        return retrofit.create(MovieApi::class.java)
     }
 
 }
