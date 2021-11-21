@@ -9,13 +9,12 @@ import retrofit2.Response
  */
 suspend fun <T: Any> handleRequest(requestFunc: suspend () -> Response<T>): Resource<T> {
 
-    return try {
+    try {
         val response = requestFunc.invoke()
         response.body()?.let { res ->
             if(response.isSuccessful) {
                 return Success(res)
             }
-            return Error(Throwable(response.message()))
         }
         return Error(Throwable(response.message()))
     } catch (exception: Exception) {
