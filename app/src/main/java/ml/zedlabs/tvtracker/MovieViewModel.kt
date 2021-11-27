@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ml.zedlabs.domain.model.Resource
 import ml.zedlabs.domain.model.Resource.*
+import ml.zedlabs.domain.model.common.UserReviewResponse
 import ml.zedlabs.domain.model.movie.MovieDetailResponse
 import ml.zedlabs.domain.model.movie.MovieListResponse
 import ml.zedlabs.domain.usecases.GetMovieDetailUseCase
@@ -17,31 +18,49 @@ class MovieViewModel @Inject constructor(
     val getMovieDetailUseCase: GetMovieDetailUseCase,
 ) : ViewModel() {
 
-    val topRatedMovieListLiveData = mutableStateOf<Resource<MovieListResponse>>(Uninitialised())
-    val similarMovieListLiveData = mutableStateOf<Resource<MovieListResponse>>(Uninitialised())
-    val movieDetailLiveData = mutableStateOf<Resource<MovieDetailResponse>>(Uninitialised())
+    val topRatedMovieListState = mutableStateOf<Resource<MovieListResponse>>(Uninitialised())
+    val similarMovieListState = mutableStateOf<Resource<MovieListResponse>>(Uninitialised())
+    val movieDetailState = mutableStateOf<Resource<MovieDetailResponse>>(Uninitialised())
+    val movieUserReviewState = mutableStateOf<Resource<UserReviewResponse>>(Uninitialised())
+    val recommendedMovieListState = mutableStateOf<Resource<MovieListResponse>>(Uninitialised())
 
     fun getMovieList(listType: String, page: Int) {
-        topRatedMovieListLiveData.value = Loading()
+        topRatedMovieListState.value = Loading()
         viewModelScope.launch {
-            topRatedMovieListLiveData.value =
+            topRatedMovieListState.value =
                 getMovieListUseCase.getMovieList(listType = listType, page = page)
         }
     }
 
     fun getSimilarMovieList(movieId: Int, page: Int) {
-        similarMovieListLiveData.value = Loading()
+        similarMovieListState.value = Loading()
         viewModelScope.launch {
-            similarMovieListLiveData.value =
+            similarMovieListState.value =
                 getMovieListUseCase.getSimilarMovies(movieId = movieId, page = page)
         }
     }
 
     fun getMovieDetail(movieId: Int) {
-        movieDetailLiveData.value = Loading()
+        movieDetailState.value = Loading()
         viewModelScope.launch {
-            movieDetailLiveData.value =
+            movieDetailState.value =
                 getMovieDetailUseCase.getMovieDetails(movieId = movieId)
+        }
+    }
+
+    fun getUserMovieReviews(movieId: Int, page: Int) {
+        movieUserReviewState.value = Loading()
+        viewModelScope.launch {
+            movieUserReviewState.value =
+                    getMovieDetailUseCase.getUserMovieReview(movieId = movieId, page = page)
+        }
+    }
+
+    fun getRecommendedMovies(movieId: Int, page: Int) {
+        recommendedMovieListState.value = Loading()
+        viewModelScope.launch {
+            recommendedMovieListState.value =
+                getMovieListUseCase.getSimilarMovies(movieId = movieId, page = page)
         }
     }
 

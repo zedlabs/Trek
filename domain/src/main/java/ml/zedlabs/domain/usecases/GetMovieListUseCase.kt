@@ -16,4 +16,8 @@ class GetMovieListUseCase (
         return movieRepository.getSimilarMovies(movieId, page)
     }
 
+    suspend fun getRecommendedMovies(movieId: Int, page: Int) : Resource<MovieListResponse> {
+        return movieRepository.getRecommendedMovies(movieId, page)
+    }
+
 }

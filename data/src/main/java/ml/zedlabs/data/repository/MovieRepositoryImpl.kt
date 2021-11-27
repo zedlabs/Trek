@@ -4,6 +4,7 @@ import ml.zedlabs.data.BuildConfig
 import ml.zedlabs.data.network.MovieApi
 import ml.zedlabs.data.util.handleRequest
 import ml.zedlabs.domain.model.Resource
+import ml.zedlabs.domain.model.common.UserReviewResponse
 import ml.zedlabs.domain.model.movie.MovieDetailResponse
 import ml.zedlabs.domain.model.movie.MovieListResponse
 import ml.zedlabs.domain.repository.MovieRepository
@@ -13,22 +14,27 @@ class MovieRepositoryImpl @Inject constructor(
     val movieApiService: MovieApi
 ) : MovieRepository {
 
-    override suspend fun getMovieList(listType: String, page: Int): Resource<MovieListResponse> {
+    override suspend fun getMovieList(
+        listType: String,
+        page: Int,
+    ): Resource<MovieListResponse> {
         return handleRequest {
             movieApiService.getImdbTopRatedMovieList(
                 listType = listType,
                 api_key = BuildConfig.APIKEY,
                 page = page,
-                region = null
+                region = null,
             )
         }
     }
 
-    override suspend fun getMovieDetails(movieId: Int): Resource<MovieDetailResponse> {
+    override suspend fun getMovieDetails(
+        movieId: Int,
+    ): Resource<MovieDetailResponse> {
         return handleRequest {
             movieApiService.getMovieDetails(
                 movie_id = movieId,
-                api_key = BuildConfig.APIKEY
+                api_key = BuildConfig.APIKEY,
             )
         }
     }
@@ -41,7 +47,33 @@ class MovieRepositoryImpl @Inject constructor(
             movieApiService.getSimilarMovieList(
                 api_key = BuildConfig.APIKEY,
                 movie_id = movieId,
-                page = page
+                page = page,
+            )
+        }
+    }
+
+    override suspend fun getUserMovieReviews(
+        movieId: Int,
+        page: Int
+    ): Resource<UserReviewResponse> {
+        return handleRequest {
+            movieApiService.getUserMovieReview(
+                api_key = BuildConfig.APIKEY,
+                movie_id = movieId,
+                page = page,
+            )
+        }
+    }
+
+    override suspend fun getRecommendedMovies(
+        movieId: Int,
+        page: Int
+    ): Resource<MovieListResponse> {
+        return handleRequest {
+            movieApiService.getUserMovieRecommendations(
+                api_key = BuildConfig.APIKEY,
+                movie_id = movieId,
+                page = page,
             )
         }
     }

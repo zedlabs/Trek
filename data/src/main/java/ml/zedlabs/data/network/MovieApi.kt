@@ -1,5 +1,6 @@
 package ml.zedlabs.data.network
 
+import ml.zedlabs.domain.model.common.UserReviewResponse
 import ml.zedlabs.domain.model.movie.MovieDetailResponse
 import ml.zedlabs.domain.model.movie.MovieListResponse
 import retrofit2.Response
@@ -30,4 +31,18 @@ interface MovieApi {
         @Query("api_key") api_key: String,
     ): Response<MovieDetailResponse>
 
+    @GET("/movie/{movie_id}/reviews")
+    suspend fun getUserMovieReview(
+        @Path("movie_id") movie_id: Int,
+        @Query("api_key") api_key: String,
+        @Query("page") page: Int,
+    ): Response<UserReviewResponse>
+
+
+    @GET("/movie/{movie_id}/recommendations")
+    suspend fun getUserMovieRecommendations(
+        @Path("movie_id") movie_id: Int,
+        @Query("api_key") api_key: String,
+        @Query("page") page: Int,
+    ): Response<MovieListResponse>
 }
