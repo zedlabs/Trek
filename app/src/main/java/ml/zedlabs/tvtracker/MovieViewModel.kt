@@ -60,7 +60,7 @@ class MovieViewModel @Inject constructor(
         recommendedMovieListState.value = Loading()
         viewModelScope.launch {
             recommendedMovieListState.value =
-                getMovieListUseCase.getSimilarMovies(movieId = movieId, page = page)
+                getMovieListUseCase.getRecommendedMovies(movieId = movieId, page = page)
         }
     }
 

@@ -11,7 +11,7 @@ import ml.zedlabs.domain.model.tv.TvSeasonDetails
 import ml.zedlabs.domain.repository.TvRepository
 import javax.inject.Inject
 
-class TvRepositoryImpl@Inject constructor(
+class TvRepositoryImpl @Inject constructor(
     val tvApiService: TvApi
 ): TvRepository {
 
