@@ -2,7 +2,7 @@ package ml.zedlabs.domain.model.movie
 
 data class MovieListResponse(
     val page: Int,
-    val results: List<Result>,
+    val results: List<MovieResult>,
     val dates: Dates?,
     val total_pages: Int,
     val total_results: Int
@@ -13,7 +13,7 @@ data class Dates(
     val minimum: String,
 )
 
-data class Result(
+data class MovieResult(
     val adult: Boolean,
     val backdrop_path: String,
     val genre_ids: List<Int>,
