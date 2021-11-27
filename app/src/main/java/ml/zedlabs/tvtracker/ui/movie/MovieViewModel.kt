@@ -1,4 +1,4 @@
-package ml.zedlabs.tvtracker
+package ml.zedlabs.tvtracker.ui.movie
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -24,6 +24,7 @@ class MovieViewModel @Inject constructor(
     val movieUserReviewState = mutableStateOf<Resource<UserReviewResponse>>(Uninitialised())
     val recommendedMovieListState = mutableStateOf<Resource<MovieListResponse>>(Uninitialised())
 
+    //have different methods for different list types
     fun getMovieList(listType: String, page: Int) {
         topRatedMovieListState.value = Loading()
         viewModelScope.launch {

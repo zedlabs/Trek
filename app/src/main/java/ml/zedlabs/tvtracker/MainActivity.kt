@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.data.util.Constants
 import ml.zedlabs.domain.model.Resource.*
+import ml.zedlabs.tvtracker.ui.movie.MovieViewModel
 import ml.zedlabs.tvtracker.ui.theme.TvTrackerTheme
 
 @AndroidEntryPoint
@@ -46,7 +47,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun listResponseWrapper() {
 
-        when(val response = movieViewModel.topRatedMovieListLiveData.value) {
+        when(val response = movieViewModel.topRatedMovieListState.value) {
             is Error -> {
                 // stop shimmer
             }

@@ -12,8 +12,8 @@ class GetTvListUseCase(
         return tvRepository.getTvShowList(listType, page)
     }
 
-    suspend fun getSimilarShows(movieId: Int, page: Int) : Resource<TvListResponse> {
-        return tvRepository.getSimilarShows(movieId, page)
+    suspend fun getSimilarShows(tvId: Int, page: Int) : Resource<TvListResponse> {
+        return tvRepository.getSimilarShows(tvId, page)
     }
 
 }

@@ -5,8 +5,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ml.zedlabs.domain.repository.MovieRepository
-import ml.zedlabs.domain.usecases.GetMovieDetailUseCase
-import ml.zedlabs.domain.usecases.GetMovieListUseCase
+import ml.zedlabs.domain.repository.TvRepository
+import ml.zedlabs.domain.usecases.*
 import javax.inject.Singleton
 
 @Module
@@ -27,6 +27,30 @@ object UseCaseComponent {
         movieRepository: MovieRepository
     ) : GetMovieDetailUseCase {
         return GetMovieDetailUseCase(movieRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetTvDetailUseCase(
+        tvRepository: TvRepository
+    ) : GetTvDetailUseCase {
+        return GetTvDetailUseCase(tvRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetTvListUseCase(
+        tvRepository: TvRepository
+    ) : GetTvListUseCase {
+        return GetTvListUseCase(tvRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetTvSeasonDetailsUseCase(
+        tvRepository: TvRepository
+    ) : GetTvSeasonDetailUseCase {
+        return GetTvSeasonDetailUseCase(tvRepository)
     }
 
 }
