@@ -22,14 +22,14 @@ import androidx.compose.ui.unit.sp
 import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.data.util.Constants
 import ml.zedlabs.domain.model.Resource.*
+import ml.zedlabs.tvtracker.ui.MainScreen
 import ml.zedlabs.tvtracker.ui.movie.MovieViewModel
 import ml.zedlabs.tvtracker.ui.theme.TvTrackerTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    val mainViewModel: MainViewModel by viewModels()
-    val movieViewModel: MovieViewModel by viewModels()
+    private val movieViewModel: MovieViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
             TvTrackerTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    listResponseWrapper()
+                    MainScreen()
                 }
             }
         }
@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                 // stop shimmer
             }
             is Loading -> {
-                //start shimmer
+                // start shimmer
             }
             is Success -> {
                 // load data in list
@@ -108,7 +108,9 @@ fun HomeScreenItemsRow(title: String, items: List<String>) {
         LazyColumn {
             itemsIndexed(items = items) { index, item ->
                 Card(modifier = Modifier.padding(6.dp)) {
-                    Text(text = item, modifier = Modifier.border(4.dp, Color.Black).padding(20.dp))
+                    Text(text = item, modifier = Modifier
+                        .border(4.dp, Color.Black)
+                        .padding(20.dp))
                 }
             }
         }

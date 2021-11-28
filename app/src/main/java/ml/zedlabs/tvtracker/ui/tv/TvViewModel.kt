@@ -3,6 +3,7 @@ package ml.zedlabs.tvtracker.ui.tv
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ml.zedlabs.data.util.Constants
 import ml.zedlabs.domain.model.Resource
@@ -16,6 +17,7 @@ import ml.zedlabs.domain.usecases.GetTvListUseCase
 import ml.zedlabs.domain.usecases.GetTvSeasonDetailUseCase
 import javax.inject.Inject
 
+@HiltViewModel
 class TvViewModel @Inject constructor(
     val getTvDetailsUseCase: GetTvDetailUseCase,
     val getTvSeasonDetailUseCase: GetTvSeasonDetailUseCase,
