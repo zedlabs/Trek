@@ -20,6 +20,10 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -71,6 +75,7 @@ dependencies {
     /** Dagger Hilt DI **/
     implementation "com.google.dagger:hilt-android:2.38.1"
     kapt "com.google.dagger:hilt-compiler:2.38.1"
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0-beta01"
 
     /** Retrofit **/
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -79,6 +84,19 @@ dependencies {
     /** Coil **/
     implementation("io.coil-kt:coil:1.4.0")
     implementation("io.coil-kt:coil-compose:1.4.0")
+
+    /** navigation **/
+    def nav_version_ktx = "2.4.0-beta02"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version_ktx"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version_ktx"
+
+    /** Material **/
+    def material_version = "1.4.0"
+    implementation "com.google.android.material:material:$material_version"
+
+    /** Fragment **/
+    def fragment_version = "1.4.0"
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
     /** Unit Test **/
     testImplementation 'junit:junit:4.13.2'

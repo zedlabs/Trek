@@ -27,7 +27,7 @@ class MovieViewModel @Inject constructor(
     val recommendedMovieListState = mutableStateOf<Resource<MovieListResponse>>(Uninitialised())
 
     //have different methods for different list types
-    fun getMovieList(listType: String, page: Int) {
+    fun getMovieList(listType: String, page: Int){
         topRatedMovieListState.value = Loading()
         viewModelScope.launch {
             topRatedMovieListState.value =

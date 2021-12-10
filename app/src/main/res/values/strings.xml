@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">TvTracker</string>
       <string name="title_domain">domain</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="list">List</string>
+    <string name="profile">Profile</string>
 </resources>
