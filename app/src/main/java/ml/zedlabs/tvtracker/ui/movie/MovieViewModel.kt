@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ml.zedlabs.data.util.Constants
 import ml.zedlabs.domain.model.Resource
 import ml.zedlabs.domain.model.Resource.*
 import ml.zedlabs.domain.model.common.UserReviewResponse
@@ -25,6 +26,10 @@ class MovieViewModel @Inject constructor(
     val movieDetailState = mutableStateOf<Resource<MovieDetailResponse>>(Uninitialised())
     val movieUserReviewState = mutableStateOf<Resource<UserReviewResponse>>(Uninitialised())
     val recommendedMovieListState = mutableStateOf<Resource<MovieListResponse>>(Uninitialised())
+
+    init {
+        getMovieList(Constants.top_rated, 1)
+    }
 
     //have different methods for different list types
     fun getMovieList(listType: String, page: Int){
