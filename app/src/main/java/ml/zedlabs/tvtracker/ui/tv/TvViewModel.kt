@@ -33,7 +33,7 @@ class TvViewModel @Inject constructor(
     fun getTopRatedTvList(page: Int) {
         topRatedTvListState.value = Loading()
         viewModelScope.launch {
-            topRatedTvListState.value = getTvListUseCase.getTvShowList(Constants.top_rated, page)
+            //topRatedTvListState.value = getTvListUseCase.getTvShowList(Constants.top_rated, page)
         }
     }
 

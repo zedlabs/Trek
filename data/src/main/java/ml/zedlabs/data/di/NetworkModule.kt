@@ -8,6 +8,7 @@ import ml.zedlabs.data.network.MovieApi
 import ml.zedlabs.data.network.TvApi
 import ml.zedlabs.data.util.Constants.base_url
 import okhttp3.OkHttpClient
+import retrofit2.CallAdapter
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
