@@ -1,4 +1,7 @@
 package ml.zedlabs.tvtracker.ui.detail
 
-class DetailViewModel {
+import androidx.lifecycle.ViewModel
+
+class DetailViewModel : ViewModel() {
+
 }
