@@ -1,4 +1,4 @@
-package ml.zedlabs.tvtracker.ui
+package ml.zedlabs.tvtracker.ui.list
 
 import androidx.fragment.app.Fragment
 

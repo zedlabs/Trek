@@ -8,30 +8,30 @@
 
     <fragment
         android:id="@+id/home_bottom"
-        android:name="ml.zedlabs.tvtracker.ui.HomeFragment"
+        android:name="ml.zedlabs.tvtracker.ui.home.HomeFragment"
         android:label="fragment_home">
     </fragment>
 
     <fragment
         android:id="@+id/search_bottom"
-        android:name="ml.zedlabs.tvtracker.ui.SearchFragment"
+        android:name="ml.zedlabs.tvtracker.ui.search.SearchFragment"
         android:label="fragment_search">
     </fragment>
 
     <fragment
         android:id="@+id/list_bottom"
-        android:name="ml.zedlabs.tvtracker.ui.ListFragment"
+        android:name="ml.zedlabs.tvtracker.ui.list.ListFragment"
         android:label="fragment_list">
     </fragment>
 
     <fragment
         android:id="@+id/profile_bottom"
-        android:name="ml.zedlabs.tvtracker.ui.ProfileFragment"
+        android:name="ml.zedlabs.tvtracker.ui.profile.ProfileFragment"
         android:label="fragment_profile" />
 
     <fragment
         android:id="@+id/detail_screen"
-        android:name="ml.zedlabs.tvtracker.ui.DetailsFragment"
+        android:name="ml.zedlabs.tvtracker.ui.detail.DetailsFragment"
         android:label="fragment_details">
     </fragment>
 

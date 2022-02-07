@@ -1,4 +1,4 @@
-package ml.zedlabs.tvtracker.ui.tv
+package ml.zedlabs.tvtracker.ui.common
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel

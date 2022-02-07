@@ -1,4 +1,4 @@
-package ml.zedlabs.tvtracker.ui.movie
+package ml.zedlabs.tvtracker.ui.common
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,4 +1,4 @@
-package ml.zedlabs.tvtracker.ui
+package ml.zedlabs.tvtracker.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,7 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.domain.model.Resource
 import ml.zedlabs.domain.model.movie.MovieListResponse
 import ml.zedlabs.domain.model.movie.MovieResult
-import ml.zedlabs.tvtracker.ui.movie.MovieViewModel
+import ml.zedlabs.tvtracker.ui.common.MovieViewModel
 import ml.zedlabs.tvtracker.util.appendAsImageUrl
 
 @AndroidEntryPoint
