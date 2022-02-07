@@ -32,6 +32,14 @@ import ml.zedlabs.domain.model.movie.MovieResult
 import ml.zedlabs.tvtracker.ui.common.MovieViewModel
 import ml.zedlabs.tvtracker.util.appendAsImageUrl
 
+/**
+ *
+ * @author {@zedlabs}
+ * @created_on {5-02-2022}
+ *
+ * This is the home screen for the app, default selection
+ * in the bottom navigation layout
+ */
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
@@ -44,26 +52,41 @@ class HomeFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                val scrollState = rememberScrollState()
-                val topRatedList by movieViewModel.topRatedMovieListState.collectAsState()
-                val upcomingList by movieViewModel.upcomingMovieListState.collectAsState()
-                val popularList by movieViewModel.popularMovieListState.collectAsState()
-                val nowPlayingList by movieViewModel.nowPlayingMovieListState.collectAsState()
-
-                Column(modifier = Modifier.verticalScroll(scrollState)) {
-                    ListResponseWrapper("\uD83D\uDCC8 Top Rated", topRatedList)
-                    ListResponseWrapper("\uD83D\uDCE6 Upcoming",upcomingList)
-                    ListResponseWrapper("\uD83D\uDE80 Popular",popularList)
-                    ListResponseWrapper("\uD83C\uDFA5 Now Playing",nowPlayingList)
-                    Spacer(modifier = Modifier.size(200.dp))
-                }
+                HomeScreenParentLayout()
             }
         }
     }
 
+    /**
+     * Main screen composable which is the container for all the horizontally
+     * scrolling lists, itself wrapped in a vertical scroll state listener
+     */
+    @Composable
+    fun HomeScreenParentLayout() {
+        val scrollState = rememberScrollState()
+        val topRatedList by movieViewModel.topRatedMovieListState.collectAsState()
+        val upcomingList by movieViewModel.upcomingMovieListState.collectAsState()
+        val popularList by movieViewModel.popularMovieListState.collectAsState()
+        val nowPlayingList by movieViewModel.nowPlayingMovieListState.collectAsState()
+
+        Column(modifier = Modifier.verticalScroll(scrollState)) {
+            ListResponseWrapper("\uD83D\uDCC8 Top Rated", topRatedList)
+            ListResponseWrapper("\uD83D\uDCE6 Upcoming", upcomingList)
+            ListResponseWrapper("\uD83D\uDE80 Popular", popularList)
+            ListResponseWrapper("\uD83C\uDFA5 Now Playing", nowPlayingList)
+            Spacer(modifier = Modifier.size(200.dp))
+        }
+    }
+
+    /**
+     * Wrapper function for all the lists, determines the state of the list
+     * based on the wrapping @link{Resource}.
+     */
     @Composable
     fun ListResponseWrapper(title: String, response: Resource<MovieListResponse>) {
 
+        // when expression is non-exhaustive because, we don't need to handle
+        // uninitialised state of the StateFlow(collected as compose state)
         when (response) {
             is Resource.Error -> {
                 // stop shimmer
@@ -119,7 +142,6 @@ class HomeFragment : Fragment() {
                 )
 
             }
-
         }
     }
 }
