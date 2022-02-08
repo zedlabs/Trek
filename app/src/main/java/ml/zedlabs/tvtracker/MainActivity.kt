@@ -1,12 +1,14 @@
 package ml.zedlabs.tvtracker
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.tvtracker.databinding.ActivityMainBinding
+import ml.zedlabs.tvtracker.ui.detail.MovieDetailsFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -24,6 +26,8 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
+                R.id.detail_screen -> binding.bottomNavigation.visibility = View.GONE
+                else -> binding.bottomNavigation.visibility = View.VISIBLE
             }
         }
 //    private val movieViewModel: MovieViewModel by viewModels()

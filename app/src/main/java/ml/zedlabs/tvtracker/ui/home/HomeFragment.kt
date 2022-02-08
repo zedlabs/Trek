@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import coil.compose.rememberImagePainter
@@ -45,7 +46,14 @@ import ml.zedlabs.tvtracker.util.appendAsImageUrl
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-    private val movieViewModel: MovieViewModel by viewModels()
+    private val movieViewModel: MovieViewModel by activityViewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        for(param in MediaSortingParam.values()) {
+            movieViewModel.getMovieList(param, Constants.MIN_PAGE)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,12 +67,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        for(param in MediaSortingParam.values()) {
-            movieViewModel.getMovieList(param, Constants.MIN_PAGE)
-        }
-    }
     /**
      * Main screen composable which is the container for all the horizontally
      * scrolling lists, itself wrapped in a vertical scroll state listener

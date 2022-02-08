@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import coil.compose.rememberImagePainter
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,8 +43,8 @@ import ml.zedlabs.tvtracker.util.appendAsImageUrl
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
 
-    private val detailViewModel: DetailViewModel by viewModels()
-    private val movieViewModel: MovieViewModel by viewModels()
+//    private val detailViewModel: DetailViewModel by viewModels()
+    private val movieViewModel: MovieViewModel by activityViewModels()
 
     private var mediaId = 0
 
