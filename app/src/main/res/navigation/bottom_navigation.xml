@@ -10,19 +10,22 @@
         android:id="@+id/home_bottom"
         android:name="ml.zedlabs.tvtracker.ui.home.HomeFragment"
         android:label="fragment_home">
+        <action
+            android:id="@+id/home_to_detail"
+            app:destination="@id/detail_screen"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
     </fragment>
 
     <fragment
         android:id="@+id/search_bottom"
         android:name="ml.zedlabs.tvtracker.ui.search.SearchFragment"
-        android:label="fragment_search">
-    </fragment>
+        android:label="fragment_search"></fragment>
 
     <fragment
         android:id="@+id/list_bottom"
         android:name="ml.zedlabs.tvtracker.ui.list.ListFragment"
-        android:label="fragment_list">
-    </fragment>
+        android:label="fragment_list"></fragment>
 
     <fragment
         android:id="@+id/profile_bottom"
@@ -31,8 +34,11 @@
 
     <fragment
         android:id="@+id/detail_screen"
-        android:name="ml.zedlabs.tvtracker.ui.detail.DetailsFragment"
+        android:name="ml.zedlabs.tvtracker.ui.detail.MovieDetailsFragment"
         android:label="fragment_details">
+        <argument
+            android:name="mediaId"
+            app:argType="integer" />
     </fragment>
 
 

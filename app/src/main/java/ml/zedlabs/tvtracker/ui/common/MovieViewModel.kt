@@ -49,15 +49,12 @@ class MovieViewModel @Inject constructor(
         MutableStateFlow<Resource<MovieListResponse>>(Uninitialised())
     val similarMovieListState = _similarMovieListState.asStateFlow()
 
-    val movieDetailState = MutableStateFlow<Resource<MovieDetailResponse>>(Uninitialised())
+    private val _movieDetailState =
+        MutableStateFlow<Resource<MovieDetailResponse>>(Uninitialised())
+    val movieDetailState = _movieDetailState.asStateFlow()
+
     val movieUserReviewState = MutableStateFlow<Resource<UserReviewResponse>>(Uninitialised())
     val recommendedMovieListState = MutableStateFlow<Resource<MovieListResponse>>(Uninitialised())
-
-    init {
-        for(param in MediaSortingParam.values()) {
-            getMovieList(param, MIN_PAGE)
-        }
-    }
 
     // we update different state flow based on the selected
     // @link{MediaSortingParam}, as all the flows are collected
@@ -104,9 +101,9 @@ class MovieViewModel @Inject constructor(
     }
 
     fun getMovieDetail(movieId: Int) {
-        movieDetailState.value = Loading()
+        _movieDetailState.value = Loading()
         viewModelScope.launch {
-            movieDetailState.value =
+            _movieDetailState.value =
                 getMovieDetailUseCase.getMovieDetails(movieId = movieId)
         }
     }

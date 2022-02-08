@@ -18,20 +18,20 @@ interface MovieApi {
         @Query("region") region: String?,
     ): Response<MovieListResponse>
 
-    @GET("/movie/{movie_id}/similar")
+    @GET("/3/movie/{movie_id}/similar")
     suspend fun getSimilarMovieList(
         @Path("movie_id") movie_id: Int,
         @Query("api_key") api_key: String,
         @Query("page") page: Int,
     ): Response<MovieListResponse>
 
-    @GET("/movie/{movie_id}")
+    @GET("/3/movie/{movie_id}")
     suspend fun getMovieDetails(
         @Path("movie_id") movie_id: Int,
         @Query("api_key") api_key: String,
     ): Response<MovieDetailResponse>
 
-    @GET("/movie/{movie_id}/reviews")
+    @GET("/3/movie/{movie_id}/reviews")
     suspend fun getUserMovieReview(
         @Path("movie_id") movie_id: Int,
         @Query("api_key") api_key: String,
@@ -39,7 +39,7 @@ interface MovieApi {
     ): Response<UserReviewResponse>
 
 
-    @GET("/movie/{movie_id}/recommendations")
+    @GET("/3/movie/{movie_id}/recommendations")
     suspend fun getUserMovieRecommendations(
         @Path("movie_id") movie_id: Int,
         @Query("api_key") api_key: String,

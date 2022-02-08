@@ -4,13 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,14 +19,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import coil.compose.rememberImagePainter
 import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.domain.model.Resource
+import ml.zedlabs.domain.model.common.MediaSortingParam
 import ml.zedlabs.domain.model.movie.MovieListResponse
 import ml.zedlabs.domain.model.movie.MovieResult
+import ml.zedlabs.tvtracker.R
 import ml.zedlabs.tvtracker.ui.common.MovieViewModel
+import ml.zedlabs.tvtracker.util.Constants
 import ml.zedlabs.tvtracker.util.appendAsImageUrl
 
 /**
@@ -57,6 +59,12 @@ class HomeFragment : Fragment() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        for(param in MediaSortingParam.values()) {
+            movieViewModel.getMovieList(param, Constants.MIN_PAGE)
+        }
+    }
     /**
      * Main screen composable which is the container for all the horizontally
      * scrolling lists, itself wrapped in a vertical scroll state listener
@@ -110,19 +118,26 @@ class HomeFragment : Fragment() {
             )
             LazyRow {
                 itemsIndexed(items = items) { _, item ->
-                    HomeScreenListItem(item.title, item.poster_path)
+                    HomeScreenListItem(
+                        item.title,
+                        item.poster_path,
+                        item.id,
+                    )
                 }
             }
         }
     }
 
     @Composable
-    fun HomeScreenListItem(title: String, imageUrl: String) {
+    fun HomeScreenListItem(title: String, imageUrl: String, mediaId: Int) {
         Card(
             modifier = Modifier
                 .padding(10.dp)
                 .width(163.dp)
                 .height(245.dp)
+                .clickable {
+                    onItemClick(mediaId)
+                }
         ) {
             Box {
                 Image(
@@ -143,6 +158,11 @@ class HomeFragment : Fragment() {
 
             }
         }
+    }
+
+    private fun onItemClick(mediaId: Int) {
+        val bundle = bundleOf("mediaId" to mediaId)
+        view?.findNavController()?.navigate(R.id.home_to_detail, bundle)
     }
 }
 
