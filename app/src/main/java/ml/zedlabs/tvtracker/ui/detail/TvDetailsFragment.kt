@@ -21,31 +21,27 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import coil.compose.rememberImagePainter
 import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.domain.model.Resource
-import ml.zedlabs.domain.model.movie.MovieDetailResponse
-import ml.zedlabs.tvtracker.ui.common.MovieViewModel
+import ml.zedlabs.domain.model.tv.TvDetailResponse
 import ml.zedlabs.tvtracker.ui.common.TvViewModel
 import ml.zedlabs.tvtracker.util.appendAsImageUrl
 
 /**
  *
  * @author {@zedlabs}
- * @created_on {7-02-2022}
+ * @created_on {9-02-2022}
  *
- * This is the main detail screen for all the movies,
+ * This is the main detail screen for all the TV shows,
  * contains detailed view, personalisation features for media type.
  *
  * receives data through bundle
  */
 @AndroidEntryPoint
-class MovieDetailsFragment : Fragment() {
+class TvDetailsFragment: Fragment() {
 
-//    private val detailViewModel: DetailViewModel by viewModels()
-    private val movieViewModel: MovieViewModel by activityViewModels()
-
+    private val tvViewModel: TvViewModel by activityViewModels()
     private var mediaId = 0
 
     override fun onCreateView(
@@ -69,7 +65,7 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun loadDataFromNetwork() {
-        movieViewModel.getMovieDetail(mediaId)
+        tvViewModel.getTvShowDetails(mediaId)
     }
 
     /**
@@ -79,11 +75,11 @@ class MovieDetailsFragment : Fragment() {
     @Composable
     fun DetailsScreenParentLayout() {
         val scrollState = rememberScrollState()
-        val movieDetails by movieViewModel.movieDetailState.collectAsState()
+        val tvDetails by tvViewModel.tvDetailState.collectAsState()
 
-        if(movieDetails is Resource.Success) {
+        if(tvDetails is Resource.Success) {
             Column(modifier = Modifier.verticalScroll(scrollState)) {
-                TopInfoCard(movieDetails.data)
+                TopInfoCard(tvDetails.data)
                 Spacer(modifier = Modifier.size(200.dp))
             }
         }
@@ -91,8 +87,8 @@ class MovieDetailsFragment : Fragment() {
     }
 
     @Composable
-    fun TopInfoCard(movieDetails: MovieDetailResponse?) {
-        movieDetails ?: return
+    fun TopInfoCard(tvDetails: TvDetailResponse?) {
+        tvDetails ?: return
         Card(
             modifier = Modifier
                 .padding(10.dp)
@@ -101,14 +97,14 @@ class MovieDetailsFragment : Fragment() {
         ) {
             Box {
                 Image(
-                    painter = rememberImagePainter(movieDetails.poster_path?.appendAsImageUrl()),
+                    painter = rememberImagePainter(tvDetails.poster_path?.appendAsImageUrl()),
                     contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.TopStart)
                 )
                 Text(
                     color = Color.White,
-                    text = movieDetails.title ?: "",
+                    text = tvDetails.name ?: "",
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .background(color = Color.Black.copy(alpha = 0.4f))

@@ -1,13 +1,15 @@
 package ml.zedlabs.tvtracker.ui.common
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import ml.zedlabs.data.util.Constants
 import ml.zedlabs.domain.model.Resource
 import ml.zedlabs.domain.model.Resource.*
+import ml.zedlabs.domain.model.common.MovieSortingParam
+import ml.zedlabs.domain.model.common.TvSortingParam
 import ml.zedlabs.domain.model.common.UserReviewResponse
 import ml.zedlabs.domain.model.tv.TvDetailResponse
 import ml.zedlabs.domain.model.tv.TvListResponse
@@ -22,46 +24,85 @@ class TvViewModel @Inject constructor(
     val getTvDetailsUseCase: GetTvDetailUseCase,
     val getTvSeasonDetailUseCase: GetTvSeasonDetailUseCase,
     val getTvListUseCase: GetTvListUseCase,
-): ViewModel() {
+) : ViewModel() {
 
-    val topRatedTvListState = mutableStateOf<Resource<TvListResponse>>(Uninitialised())
-    val similarTvListState = mutableStateOf<Resource<TvListResponse>>(Uninitialised())
-    val tvDetailState = mutableStateOf<Resource<TvDetailResponse>>(Uninitialised())
-    val tvUserReviewState = mutableStateOf<Resource<UserReviewResponse>>(Uninitialised())
-    val tvSeasonDetailsState = mutableStateOf<Resource<TvSeasonDetails>>(Uninitialised())
+    private val _topRatedTvListState = MutableStateFlow<Resource<TvListResponse>>(Uninitialised())
+    val topRatedTvListState = _topRatedTvListState.asStateFlow()
 
-    fun getTopRatedTvList(page: Int) {
-        topRatedTvListState.value = Loading()
-        viewModelScope.launch {
-            //topRatedTvListState.value = getTvListUseCase.getTvShowList(Constants.top_rated, page)
+    private val _onTheAirTvListState = MutableStateFlow<Resource<TvListResponse>>(Uninitialised())
+    val onTheAirTvListState = _onTheAirTvListState.asStateFlow()
+
+    private val _popularTvListState = MutableStateFlow<Resource<TvListResponse>>(Uninitialised())
+    val popularTvListState = _popularTvListState.asStateFlow()
+
+    private val _similarTvListState = MutableStateFlow<Resource<TvListResponse>>(Uninitialised())
+    val similarTvListState = _similarTvListState.asStateFlow()
+
+    private val _tvDetailState = MutableStateFlow<Resource<TvDetailResponse>>(Uninitialised())
+    val tvDetailState = _tvDetailState.asStateFlow()
+
+    private val _tvUserReviewState = MutableStateFlow<Resource<UserReviewResponse>>(Uninitialised())
+    val tvUserReviewState = _tvUserReviewState.asStateFlow()
+
+    private val _tvSeasonDetailsState = MutableStateFlow<Resource<TvSeasonDetails>>(Uninitialised())
+    val tvSeasonDetailsState = _tvSeasonDetailsState.asStateFlow()
+
+    // we update different state flow based on the selected
+    // @link{MediaSortingParam}, as all the flows are collected
+    // on the same screen.
+    fun getTvList(listType: TvSortingParam, page: Int) {
+        when (listType) {
+            TvSortingParam.TOP_RATED -> {
+                _topRatedTvListState.value = Loading()
+                viewModelScope.launch {
+                    _topRatedTvListState.value =
+                        getTvListUseCase.getTvShowList(listType = listType.query, page = page)
+                }
+            }
+            TvSortingParam.ON_THE_AIR -> {
+                _onTheAirTvListState.value = Loading()
+                viewModelScope.launch {
+                    _onTheAirTvListState.value =
+                        getTvListUseCase.getTvShowList(listType = listType.query, page = page)
+                }
+            }
+            TvSortingParam.POPULAR -> {
+                _popularTvListState.value = Loading()
+                viewModelScope.launch {
+                    _popularTvListState.value =
+                        getTvListUseCase.getTvShowList(listType = listType.query, page = page)
+                }
+            }
         }
     }
 
+
     fun getSimilarTvList(tvId: Int, page: Int) {
-        similarTvListState.value = Loading()
+        _similarTvListState.value = Loading()
         viewModelScope.launch {
-            similarTvListState.value = getTvListUseCase.getSimilarShows(tvId, page)
+            _similarTvListState.value = getTvListUseCase.getSimilarShows(tvId, page)
         }
     }
 
     fun getTvShowDetails(tvId: Int) {
-        tvDetailState.value = Loading()
+        _tvDetailState.value = Loading()
         viewModelScope.launch {
-            tvDetailState.value = getTvDetailsUseCase.getTvShowDetails(tvId)
+            _tvDetailState.value = getTvDetailsUseCase.getTvShowDetails(tvId)
         }
     }
 
     fun getTvUserReviews(tvId: Int, page: Int) {
-        tvUserReviewState.value = Loading()
+        _tvUserReviewState.value = Loading()
         viewModelScope.launch {
-            tvUserReviewState.value = getTvDetailsUseCase.getTvShowReviews(tvId, page)
+            _tvUserReviewState.value = getTvDetailsUseCase.getTvShowReviews(tvId, page)
         }
     }
 
     fun getTvSeasonDetails(tvId: Int, seasonNumber: Int) {
-        tvSeasonDetailsState.value = Loading()
+        _tvSeasonDetailsState.value = Loading()
         viewModelScope.launch {
-            tvSeasonDetailsState.value = getTvSeasonDetailUseCase.getTvSeasonDetails(tvId, seasonNumber)
+            _tvSeasonDetailsState.value =
+                getTvSeasonDetailUseCase.getTvSeasonDetails(tvId, seasonNumber)
         }
     }
 

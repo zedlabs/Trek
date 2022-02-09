@@ -22,16 +22,19 @@ import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import coil.compose.rememberImagePainter
 import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.domain.model.Resource
-import ml.zedlabs.domain.model.common.MediaSortingParam
+import ml.zedlabs.domain.model.common.MovieSortingParam
+import ml.zedlabs.domain.model.common.TvSortingParam
 import ml.zedlabs.domain.model.movie.MovieListResponse
 import ml.zedlabs.domain.model.movie.MovieResult
+import ml.zedlabs.domain.model.tv.TvListResponse
+import ml.zedlabs.domain.model.tv.TvResult
 import ml.zedlabs.tvtracker.R
 import ml.zedlabs.tvtracker.ui.common.MovieViewModel
+import ml.zedlabs.tvtracker.ui.common.TvViewModel
 import ml.zedlabs.tvtracker.util.Constants
 import ml.zedlabs.tvtracker.util.appendAsImageUrl
 
@@ -47,11 +50,15 @@ import ml.zedlabs.tvtracker.util.appendAsImageUrl
 class HomeFragment : Fragment() {
 
     private val movieViewModel: MovieViewModel by activityViewModels()
+    private val tvViewModel: TvViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        for(param in MediaSortingParam.values()) {
+        for (param in MovieSortingParam.values()) {
             movieViewModel.getMovieList(param, Constants.MIN_PAGE)
+        }
+        for (param in TvSortingParam.values()) {
+            tvViewModel.getTvList(param, Constants.MIN_PAGE)
         }
     }
 
@@ -74,22 +81,32 @@ class HomeFragment : Fragment() {
     @Composable
     fun HomeScreenParentLayout() {
         val scrollState = rememberScrollState()
-        val topRatedList by movieViewModel.topRatedMovieListState.collectAsState()
-        val upcomingList by movieViewModel.upcomingMovieListState.collectAsState()
-        val popularList by movieViewModel.popularMovieListState.collectAsState()
-        val nowPlayingList by movieViewModel.nowPlayingMovieListState.collectAsState()
+        //movie list data
+        val topRatedMovieList by movieViewModel.topRatedMovieListState.collectAsState()
+        val upcomingMovieList by movieViewModel.upcomingMovieListState.collectAsState()
+        val popularMovieList by movieViewModel.popularMovieListState.collectAsState()
+        val nowPlayingMovieList by movieViewModel.nowPlayingMovieListState.collectAsState()
+
+        //tv list data
+        val topRatedTvList by tvViewModel.topRatedTvListState.collectAsState()
+        val upcomingTvList by tvViewModel.onTheAirTvListState.collectAsState()
+        val popularTvList by tvViewModel.popularTvListState.collectAsState()
 
         Column(modifier = Modifier.verticalScroll(scrollState)) {
-            ListResponseWrapper("\uD83D\uDCC8 Top Rated", topRatedList)
-            ListResponseWrapper("\uD83D\uDCE6 Upcoming", upcomingList)
-            ListResponseWrapper("\uD83D\uDE80 Popular", popularList)
-            ListResponseWrapper("\uD83C\uDFA5 Now Playing", nowPlayingList)
+            ListResponseWrapper("\uD83D\uDCC8 Top Rated", topRatedMovieList)
+            ListResponseWrapper("\uD83D\uDCE6 Upcoming", upcomingMovieList)
+            ListResponseWrapper("\uD83D\uDE80 Popular", popularMovieList)
+            ListResponseWrapper("\uD83C\uDFA5 Now Playing", nowPlayingMovieList)
+
+            TvListResponseWrapper("\uD83D\uDCC8 Top Rated Shows", topRatedTvList)
+            TvListResponseWrapper("\uD83D\uDCE6 On the Air Shows", upcomingTvList)
+            TvListResponseWrapper("\uD83D\uDE80 Popular Shows", popularTvList)
             Spacer(modifier = Modifier.size(200.dp))
         }
     }
 
     /**
-     * Wrapper function for all the lists, determines the state of the list
+     * Wrapper function for all the Movie lists, determines the state of the list
      * based on the wrapping @link{Resource}.
      */
     @Composable
@@ -110,6 +127,28 @@ class HomeFragment : Fragment() {
         }
     }
 
+    /**
+     * Wrapper function for all the TV lists, determines the state of the list
+     * based on the wrapping @link{Resource}.
+     */
+    @Composable
+    fun TvListResponseWrapper(title: String, response: Resource<TvListResponse>) {
+
+        // when expression is non-exhaustive because, we don't need to handle
+        // uninitialised state of the StateFlow(collected as compose state)
+        when (response) {
+            is Resource.Error -> {
+                // stop shimmer
+            }
+            is Resource.Loading -> {
+                // start shimmer
+            }
+            is Resource.Success -> {
+                HomeScreenTvItemsRow(title, items = response.data?.results ?: listOf())
+            }
+        }
+    }
+
     @Composable
     fun HomeScreenItemsRow(title: String, items: List<MovieResult>) {
         Column {
@@ -124,6 +163,7 @@ class HomeFragment : Fragment() {
                         item.title,
                         item.poster_path,
                         item.id,
+                        ::onItemClick
                     )
                 }
             }
@@ -131,14 +171,40 @@ class HomeFragment : Fragment() {
     }
 
     @Composable
-    fun HomeScreenListItem(title: String, imageUrl: String, mediaId: Int) {
+    fun HomeScreenTvItemsRow(title: String, items: List<TvResult>) {
+        Column {
+            Text(
+                text = title,
+                modifier = Modifier.padding(20.dp),
+                fontSize = 20.sp,
+            )
+            LazyRow {
+                itemsIndexed(items = items) { _, item ->
+                    HomeScreenListItem(
+                        item.name,
+                        item.poster_path,
+                        item.id,
+                        ::onTvItemClick
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun HomeScreenListItem(
+        title: String,
+        imageUrl: String,
+        mediaId: Int,
+        itemClick: (mediaId: Int) -> Unit
+    ) {
         Card(
             modifier = Modifier
                 .padding(10.dp)
                 .width(163.dp)
                 .height(245.dp)
                 .clickable {
-                    onItemClick(mediaId)
+                    itemClick(mediaId)
                 }
         ) {
             Box {
@@ -164,7 +230,12 @@ class HomeFragment : Fragment() {
 
     private fun onItemClick(mediaId: Int) {
         val bundle = bundleOf("mediaId" to mediaId)
-        view?.findNavController()?.navigate(R.id.home_to_detail, bundle)
+        view?.findNavController()?.navigate(R.id.home_to_movie_detail, bundle)
+    }
+
+    private fun onTvItemClick(mediaId: Int) {
+        val bundle = bundleOf("mediaId" to mediaId)
+        view?.findNavController()?.navigate(R.id.home_to_tv_detail, bundle)
     }
 }
 

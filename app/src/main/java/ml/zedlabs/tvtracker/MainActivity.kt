@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.detail_screen -> binding.bottomNavigation.visibility = View.GONE
+                R.id.movie_detail_screen, R.id.tv_detail_screen -> binding.bottomNavigation.visibility = View.GONE
                 else -> binding.bottomNavigation.visibility = View.VISIBLE
             }
         }

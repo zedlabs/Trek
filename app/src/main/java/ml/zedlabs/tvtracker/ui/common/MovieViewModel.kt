@@ -9,14 +9,13 @@ import kotlinx.coroutines.launch
 import ml.zedlabs.domain.model.Resource
 import ml.zedlabs.domain.model.Resource.Loading
 import ml.zedlabs.domain.model.Resource.Uninitialised
-import ml.zedlabs.domain.model.common.MediaSortingParam
-import ml.zedlabs.domain.model.common.MediaSortingParam.*
+import ml.zedlabs.domain.model.common.MovieSortingParam
+import ml.zedlabs.domain.model.common.MovieSortingParam.*
 import ml.zedlabs.domain.model.common.UserReviewResponse
 import ml.zedlabs.domain.model.movie.MovieDetailResponse
 import ml.zedlabs.domain.model.movie.MovieListResponse
 import ml.zedlabs.domain.usecases.GetMovieDetailUseCase
 import ml.zedlabs.domain.usecases.GetMovieListUseCase
-import ml.zedlabs.tvtracker.util.Constants.MIN_PAGE
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,13 +52,16 @@ class MovieViewModel @Inject constructor(
         MutableStateFlow<Resource<MovieDetailResponse>>(Uninitialised())
     val movieDetailState = _movieDetailState.asStateFlow()
 
-    val movieUserReviewState = MutableStateFlow<Resource<UserReviewResponse>>(Uninitialised())
-    val recommendedMovieListState = MutableStateFlow<Resource<MovieListResponse>>(Uninitialised())
+    private val _movieUserReviewState = MutableStateFlow<Resource<UserReviewResponse>>(Uninitialised())
+    val movieUserReviewState = _movieUserReviewState.asStateFlow()
+
+    private val _recommendedMovieListState = MutableStateFlow<Resource<MovieListResponse>>(Uninitialised())
+    val recommendedMovieListState = _recommendedMovieListState.asStateFlow()
 
     // we update different state flow based on the selected
     // @link{MediaSortingParam}, as all the flows are collected
     // on the same screen.
-    fun getMovieList(listType: MediaSortingParam, page: Int) {
+    fun getMovieList(listType: MovieSortingParam, page: Int) {
         when (listType) {
             TOP_RATED -> {
                 _topRatedMovieListState.value = Loading()
@@ -109,17 +111,17 @@ class MovieViewModel @Inject constructor(
     }
 
     fun getUserMovieReviews(movieId: Int, page: Int) {
-        movieUserReviewState.value = Loading()
+        _movieUserReviewState.value = Loading()
         viewModelScope.launch {
-            movieUserReviewState.value =
+            _movieUserReviewState.value =
                 getMovieDetailUseCase.getUserMovieReview(movieId = movieId, page = page)
         }
     }
 
     fun getRecommendedMovies(movieId: Int, page: Int) {
-        recommendedMovieListState.value = Loading()
+        _recommendedMovieListState.value = Loading()
         viewModelScope.launch {
-            recommendedMovieListState.value =
+            _recommendedMovieListState.value =
                 getMovieListUseCase.getRecommendedMovies(movieId = movieId, page = page)
         }
     }

@@ -19,27 +19,27 @@ interface TvApi {
         @Query("page") page: Int,
     ): Response<TvListResponse>
 
-    @GET("/tv/{tv_id}/similar")
+    @GET("/3/tv/{tv_id}/similar")
     suspend fun getSimilarTvShows(
         @Path("tv_id") tv_id: Int,
         @Query("api_key") api_key: String,
         @Query("page") page: Int,
     ): Response<TvListResponse>
 
-    @GET("/tv/{tv_id}")
+    @GET("/3/tv/{tv_id}")
     suspend fun getTvShowDetails(
         @Path("tv_id") tv_id: Int,
         @Query("api_key") api_key: String,
     ): Response<TvDetailResponse>
 
-    @GET("/tv/{tv_id}/season/{season_number}")
+    @GET("/3/tv/{tv_id}/season/{season_number}")
     suspend fun getTvSeasonDetails(
         @Path("tv_id") tv_id: Int,
         @Path("season_number") season_number: Int,
         @Query("api_key") api_key: String,
     ): Response<TvSeasonDetails>
 
-    @GET("/tv/{tv_id}/reviews")
+    @GET("/3/tv/{tv_id}/reviews")
     suspend fun getUserTvReviews(
         @Path("tv_id") tv_id: Int,
         @Query("api_key") api_key: String,
