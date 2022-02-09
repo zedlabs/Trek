@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import ml.zedlabs.domain.repository.AppCommonsRepository
 import ml.zedlabs.domain.repository.MovieRepository
 import ml.zedlabs.domain.repository.TvRepository
 import ml.zedlabs.domain.usecases.*
@@ -51,6 +52,14 @@ object UseCaseComponent {
         tvRepository: TvRepository
     ) : GetTvSeasonDetailUseCase {
         return GetTvSeasonDetailUseCase(tvRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchUseCase(
+        appCommonsRepository: AppCommonsRepository
+    ) : SearchUseCase {
+        return SearchUseCase(appCommonsRepository)
     }
 
 }
