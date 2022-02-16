@@ -1,7 +1,6 @@
 package ml.zedlabs.data.network
 
-import ml.zedlabs.domain.model.movie.MovieListResponse
-import retrofit2.Response
+import ml.zedlabs.domain.model.common.SearchListResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -13,7 +12,7 @@ interface JsonApi {
         @Query("api_key") api_key: String,
         @Query("query") query: String,
         @Query("page") page: Int,
-    ): Response<MovieListResponse>
+    ): SearchListResponse
 
 
 }

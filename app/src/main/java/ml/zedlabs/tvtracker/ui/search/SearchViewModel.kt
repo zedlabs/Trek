@@ -1,14 +1,20 @@
 package ml.zedlabs.tvtracker.ui.search
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import ml.zedlabs.domain.model.Resource
-import ml.zedlabs.domain.model.movie.MovieListResponse
+import kotlinx.coroutines.flow.Flow
+import ml.zedlabs.domain.model.common.SearchListItem
+
 import ml.zedlabs.domain.usecases.SearchUseCase
+import ml.zedlabs.tvtracker.util.Constants
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,15 +22,12 @@ class SearchViewModel @Inject constructor(
     val searchUseCase: SearchUseCase
 ) : ViewModel() {
 
-    private val _searchListState =
-        MutableStateFlow<Resource<MovieListResponse>>(Resource.Uninitialised())
-    val searchListState = _searchListState.asStateFlow()
-
-    fun searchData(query: String, page: Int) {
-        _searchListState.value = Resource.Loading()
-        viewModelScope.launch {
-            _searchListState.value =
-                searchUseCase.search(query = query, page = page)
-        }
+    fun getMovies(query: String): Flow<PagingData<SearchListItem>> {
+        return Pager(PagingConfig(pageSize = Constants.SEARCH_PAGE_SIZE)) {
+            SearchPagingSource(
+                searchUseCase,
+                query,
+            )
+        }.flow
     }
 }

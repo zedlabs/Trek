@@ -97,6 +97,12 @@ dependencies {
     def fragment_version = "1.4.0"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
+    /** Paging Compose **/
+    implementation("androidx.paging:paging-compose:1.0.0-alpha14")
+
+    /** debug Crash reporting **/
+    debugImplementation "com.github.haroldadmin:WhatTheStack:1.0.0-alpha03"
+
     /** Unit Test **/
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
