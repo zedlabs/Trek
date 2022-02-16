@@ -1,9 +1,14 @@
 package ml.zedlabs.data.di
 
+import android.content.Context
+import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import ml.zedlabs.data.local_db.AddedListDao
+import ml.zedlabs.data.local_db.AddedListDatabase
 import ml.zedlabs.data.network.JsonApi
 import ml.zedlabs.data.network.MovieApi
 import ml.zedlabs.data.network.TvApi
@@ -23,7 +28,7 @@ object RepositoryModule {
     @Singleton
     fun provideMovieRepository(
         movieApiService: MovieApi
-    ) : MovieRepository {
+    ): MovieRepository {
         return MovieRepositoryImpl(movieApiService)
     }
 
@@ -31,7 +36,7 @@ object RepositoryModule {
     @Singleton
     fun provideTvRepository(
         tvApiService: TvApi
-    ) : TvRepository {
+    ): TvRepository {
         return TvRepositoryImpl(tvApiService)
     }
 
@@ -39,8 +44,27 @@ object RepositoryModule {
     @Singleton
     fun provideAppCommonsRepository(
         jsonApi: JsonApi
-    ) : AppCommonsRepository {
+    ): AppCommonsRepository {
         return AppCommonsRepositoryImpl(jsonApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAddedListDatabase(
+        @ApplicationContext applicationContext: Context
+    ): AddedListDatabase {
+        return Room
+            .databaseBuilder(
+                applicationContext,
+                AddedListDatabase::class.java, "added-list-db"
+            ).fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAddedListDao(addedListDatabase: AddedListDatabase): AddedListDao {
+        return addedListDatabase.addedListDao()
     }
 
 }
