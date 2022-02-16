@@ -26,6 +26,25 @@ object RepositoryModule {
 
     @Provides
     @Singleton
+    fun provideAddedListDatabase(
+        @ApplicationContext applicationContext: Context
+    ): AddedListDatabase {
+        return Room
+            .databaseBuilder(
+                applicationContext,
+                AddedListDatabase::class.java, "added-list-db"
+            ).fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAddedListDao(addedListDatabase: AddedListDatabase): AddedListDao {
+        return addedListDatabase.addedListDao()
+    }
+
+    @Provides
+    @Singleton
     fun provideMovieRepository(
         movieApiService: MovieApi
     ): MovieRepository {
@@ -43,28 +62,13 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideAppCommonsRepository(
-        jsonApi: JsonApi
+        jsonApi: JsonApi,
+        addedListDao: AddedListDao
     ): AppCommonsRepository {
-        return AppCommonsRepositoryImpl(jsonApi)
-    }
-
-    @Provides
-    @Singleton
-    fun provideAddedListDatabase(
-        @ApplicationContext applicationContext: Context
-    ): AddedListDatabase {
-        return Room
-            .databaseBuilder(
-                applicationContext,
-                AddedListDatabase::class.java, "added-list-db"
-            ).fallbackToDestructiveMigration()
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideAddedListDao(addedListDatabase: AddedListDatabase): AddedListDao {
-        return addedListDatabase.addedListDao()
+        return AppCommonsRepositoryImpl(
+            jsonApi,
+            addedListDao
+        )
     }
 
 }

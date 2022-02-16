@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class AddedListItem(
+data class AddedList(
     @PrimaryKey val uid: Int,
     @ColumnInfo(name = "media_name") val title: String?,
     @ColumnInfo(name = "media_desc") val description: String?,

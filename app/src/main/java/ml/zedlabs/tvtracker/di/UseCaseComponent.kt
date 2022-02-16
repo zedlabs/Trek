@@ -62,4 +62,12 @@ object UseCaseComponent {
         return SearchUseCase(appCommonsRepository)
     }
 
+    @Provides
+    @Singleton
+    fun provideUserAddedListUseCase(
+        appCommonsRepository: AppCommonsRepository
+    ) : GetUserAddedListUseCase {
+        return GetUserAddedListUseCase(appCommonsRepository)
+    }
+
 }
