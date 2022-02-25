@@ -8,17 +8,17 @@ import androidx.room.Query
 @Dao
 interface AddedListDao {
     @Query("SELECT * FROM addedlist")
-    fun getAll(): List<AddedList>
+    suspend fun getAll(): List<AddedList>
 
     @Query("SELECT * FROM addedlist WHERE uid IN (:mediaIds)")
-    fun loadAllByIds(mediaIds: IntArray): List<AddedList>
+    suspend fun loadAllByIds(mediaIds: IntArray): List<AddedList>
 
     @Query("SELECT * FROM addedlist WHERE media_name LIKE :name")
-    fun findByName(name: String): AddedList
+    suspend fun findByName(name: String): AddedList
 
     @Insert
-    fun insertAll(vararg items: AddedList)
+    suspend fun insertAll(vararg items: AddedList)
 
     @Delete
-    fun delete(items: AddedList)
+    suspend fun delete(items: AddedList)
 }

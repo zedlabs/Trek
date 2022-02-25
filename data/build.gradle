@@ -52,10 +52,10 @@ dependencies {
 
     /** room **/
     def roomVersion = "2.4.2"
-    implementation "androidx.room:room-runtime:$roomVersion"
+    api "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
-    implementation "androidx.room:room-paging:$roomVersion"
+    implementation "androidx.room:room-paging:2.5.0-alpha01"
 
     /** Unit Test **/
     testImplementation 'junit:junit:4.13.2'

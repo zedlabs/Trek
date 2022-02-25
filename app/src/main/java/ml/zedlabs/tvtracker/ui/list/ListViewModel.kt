@@ -6,9 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import ml.zedlabs.domain.model.Resource
 import ml.zedlabs.domain.model.common.AddedList
-import ml.zedlabs.domain.model.movie.MovieListResponse
 import ml.zedlabs.domain.usecases.GetUserAddedListUseCase
 import javax.inject.Inject
 
