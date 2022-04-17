@@ -1,5 +1,6 @@
 package ml.zedlabs.tvtracker.ui.list
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,18 +16,17 @@ class ListViewModel @Inject constructor(
     val getUserAddedListUseCase: GetUserAddedListUseCase
 ) : ViewModel() {
 
-    private val _userAddedListState =
-        MutableStateFlow<List<AddedList>>(emptyList())
-    val userAddedListState = _userAddedListState.asStateFlow()
+    val userAddedListState = getUserAddedListUseCase.getUserAddedList()
 
-    init {
-        getUserAddedList()
+    fun addToUserAddedList(item: AddedList) {
+        viewModelScope.launch {
+            getUserAddedListUseCase.addToUserAddedList(item)
+        }
     }
 
-    fun getUserAddedList() {
+    fun deleteAllEntries() {
         viewModelScope.launch {
-            _userAddedListState.value =
-                getUserAddedListUseCase.getUserAddedList()
+            getUserAddedListUseCase.deleteAllItems()
         }
     }
 }

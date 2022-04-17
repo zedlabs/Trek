@@ -3,6 +3,10 @@ plugins {
     id 'kotlin'
 }
 
+dependencies {
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_7
     targetCompatibility = JavaVersion.VERSION_1_7

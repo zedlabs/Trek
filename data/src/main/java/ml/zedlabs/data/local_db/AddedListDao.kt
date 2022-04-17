@@ -4,11 +4,12 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AddedListDao {
     @Query("SELECT * FROM addedlist")
-    suspend fun getAll(): List<AddedList>
+    fun getAll(): Flow<List<AddedList>>
 
     @Query("SELECT * FROM addedlist WHERE uid IN (:mediaIds)")
     suspend fun loadAllByIds(mediaIds: IntArray): List<AddedList>
@@ -21,4 +22,7 @@ interface AddedListDao {
 
     @Delete
     suspend fun delete(items: AddedList)
+
+    @Query("DELETE FROM addedlist")
+    suspend fun deleteAll()
 }
