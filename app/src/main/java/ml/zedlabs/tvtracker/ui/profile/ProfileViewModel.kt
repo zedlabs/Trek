@@ -1,4 +1,10 @@
 package ml.zedlabs.tvtracker.ui.profile
 
-class ProfileViewModel {
+import androidx.lifecycle.ViewModel
+
+class ProfileViewModel : ViewModel() {
+    // profile will not have any network interaction, but it will have
+    // interaction with shared-prefs and possibly with the local db
+
+
 }

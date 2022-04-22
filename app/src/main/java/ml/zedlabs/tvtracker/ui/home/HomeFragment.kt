@@ -35,6 +35,7 @@ import ml.zedlabs.domain.model.tv.TvResult
 import ml.zedlabs.tvtracker.R
 import ml.zedlabs.tvtracker.ui.common.MovieViewModel
 import ml.zedlabs.tvtracker.ui.common.TvViewModel
+import ml.zedlabs.tvtracker.ui.theme.TvTrackerTheme
 import ml.zedlabs.tvtracker.util.Constants
 import ml.zedlabs.tvtracker.util.appendAsImageUrl
 
@@ -69,7 +70,10 @@ class HomeFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                HomeScreenParentLayout()
+                TvTrackerTheme() {
+                    HomeScreenParentLayout()
+                }
+
             }
         }
     }

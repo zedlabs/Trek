@@ -103,6 +103,9 @@ dependencies {
     /** debug Crash reporting **/
     debugImplementation "com.github.haroldadmin:WhatTheStack:1.0.0-alpha03"
 
+    /** Preference DataStore **/
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+
     /** Unit Test **/
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

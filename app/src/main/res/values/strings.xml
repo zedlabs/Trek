@@ -5,4 +5,5 @@
     <string name="search">Search</string>
     <string name="list">List</string>
     <string name="profile">Profile</string>
+    <string name="pref_file_name">ml.zedlabs.trek.userPref</string>
 </resources>
