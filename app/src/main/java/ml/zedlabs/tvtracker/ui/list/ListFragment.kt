@@ -116,10 +116,7 @@ class ListFragment : Fragment() {
                 .width(163.dp)
                 .height(245.dp)
                 .clickable {
-                    when(type) {
-                        MediaType.MOVIE -> onItemClick(mediaId = mediaId)
-                        MediaType.TV, MediaType.ANIME -> onTvItemClick(mediaId = mediaId)
-                    }
+                   onItemClick(mediaId = mediaId, mediaType = type)
                 }
         ) {
             Box {
@@ -142,15 +139,17 @@ class ListFragment : Fragment() {
             }
         }
     }
-    private fun onItemClick(mediaId: Int) {
+    private fun onItemClick(mediaId: Int, mediaType: MediaType) {
         val bundle = bundleOf("mediaId" to mediaId)
-        view?.findNavController()?.navigate(R.id.list_to_movie_details, bundle)
-    }
+        with(view?.findNavController()) {
+            // exit out if the nav controller instance cannot be found
+            this?: return
+            when(mediaType) {
+                MediaType.MOVIE -> navigate(R.id.list_to_movie_details, bundle)
+                MediaType.TV , MediaType.ANIME-> navigate(R.id.list_to_tv_detail, bundle)
 
-    private fun onTvItemClick(mediaId: Int) {
-        val bundle = bundleOf("mediaId" to mediaId)
-        view?.findNavController()?.navigate(R.id.list_to_tv_detail, bundle)
+            }
+        }
     }
-
 
 }
