@@ -25,10 +25,13 @@ import androidx.fragment.app.viewModels
 import coil.compose.rememberImagePainter
 import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.domain.model.Resource
+import ml.zedlabs.domain.model.common.AddedList
 import ml.zedlabs.domain.model.movie.MovieDetailResponse
 import ml.zedlabs.tvtracker.ui.common.MovieViewModel
 import ml.zedlabs.tvtracker.ui.common.TvViewModel
+import ml.zedlabs.tvtracker.ui.list.ListViewModel
 import ml.zedlabs.tvtracker.util.appendAsImageUrl
+import ml.zedlabs.tvtracker.util.mapToMediaCommon
 
 /**
  *
@@ -43,8 +46,9 @@ import ml.zedlabs.tvtracker.util.appendAsImageUrl
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
 
-//    private val detailViewModel: DetailViewModel by viewModels()
+    //    private val detailViewModel: DetailViewModel by viewModels()
     private val movieViewModel: MovieViewModel by activityViewModels()
+    private val listViewModel: ListViewModel by activityViewModels()
 
     private var mediaId = 0
 
@@ -78,42 +82,21 @@ class MovieDetailsFragment : Fragment() {
      */
     @Composable
     fun DetailsScreenParentLayout() {
-        val scrollState = rememberScrollState()
         val movieDetails by movieViewModel.movieDetailState.collectAsState()
 
-        if(movieDetails is Resource.Success) {
-            Column(modifier = Modifier.verticalScroll(scrollState)) {
-                TopInfoCard(movieDetails.data)
-                Spacer(modifier = Modifier.size(200.dp))
-            }
-        }
-
-    }
-
-    @Composable
-    fun TopInfoCard(movieDetails: MovieDetailResponse?) {
-        movieDetails ?: return
-        Card(
-            modifier = Modifier
-                .padding(10.dp)
-                .width(163.dp)
-                .height(245.dp)
-        ) {
-            Box {
-                Image(
-                    painter = rememberImagePainter(movieDetails.poster_path?.appendAsImageUrl()),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                )
-                Text(
-                    color = Color.White,
-                    text = movieDetails.title ?: "",
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .background(color = Color.Black.copy(alpha = 0.4f))
-                        .padding(10.dp)
-                        .fillMaxWidth()
+        if (movieDetails is Resource.Success) {
+            val movieItem = movieDetails.data?.mapToMediaCommon() ?: return
+            DetailsScreenMainLayout(movieItem) {
+                // SAM for adding the media to users media list
+                listViewModel.addToUserAddedList(
+                    with(movieItem) {
+                        AddedList(
+                            uid = mediaId,
+                            posterPath = posterPath,
+                            title = title,
+                            description = description
+                        )
+                    }
                 )
             }
         }

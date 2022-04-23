@@ -24,9 +24,12 @@ import androidx.fragment.app.activityViewModels
 import coil.compose.rememberImagePainter
 import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.domain.model.Resource
+import ml.zedlabs.domain.model.common.AddedList
 import ml.zedlabs.domain.model.tv.TvDetailResponse
 import ml.zedlabs.tvtracker.ui.common.TvViewModel
+import ml.zedlabs.tvtracker.ui.list.ListViewModel
 import ml.zedlabs.tvtracker.util.appendAsImageUrl
+import ml.zedlabs.tvtracker.util.mapToMediaCommon
 
 /**
  *
@@ -42,6 +45,7 @@ import ml.zedlabs.tvtracker.util.appendAsImageUrl
 class TvDetailsFragment: Fragment() {
 
     private val tvViewModel: TvViewModel by activityViewModels()
+    private val listViewModel: ListViewModel by activityViewModels()
     private var mediaId = 0
 
     override fun onCreateView(
@@ -74,45 +78,24 @@ class TvDetailsFragment: Fragment() {
      */
     @Composable
     fun DetailsScreenParentLayout() {
-        val scrollState = rememberScrollState()
         val tvDetails by tvViewModel.tvDetailState.collectAsState()
-
         if(tvDetails is Resource.Success) {
-            Column(modifier = Modifier.verticalScroll(scrollState)) {
-                TopInfoCard(tvDetails.data)
-                Spacer(modifier = Modifier.size(200.dp))
-            }
-        }
-
-    }
-
-    @Composable
-    fun TopInfoCard(tvDetails: TvDetailResponse?) {
-        tvDetails ?: return
-        Card(
-            modifier = Modifier
-                .padding(10.dp)
-                .width(163.dp)
-                .height(245.dp)
-        ) {
-            Box {
-                Image(
-                    painter = rememberImagePainter(tvDetails.poster_path?.appendAsImageUrl()),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                )
-                Text(
-                    color = Color.White,
-                    text = tvDetails.name ?: "",
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .background(color = Color.Black.copy(alpha = 0.4f))
-                        .padding(10.dp)
-                        .fillMaxWidth()
+            val tvItem = tvDetails.data?.mapToMediaCommon() ?: return
+            DetailsScreenMainLayout(tvItem) {
+                // SAM for adding the media to users media list
+                listViewModel.addToUserAddedList(
+                    with(tvItem) {
+                        AddedList(
+                            uid = mediaId,
+                            posterPath = posterPath,
+                            title = title,
+                            description = description,
+                        )
+                    }
                 )
             }
         }
+
     }
 
 }

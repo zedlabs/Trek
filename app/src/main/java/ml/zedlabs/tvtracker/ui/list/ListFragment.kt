@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import coil.compose.rememberImagePainter
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +32,7 @@ import kotlin.random.Random
 @AndroidEntryPoint
 class ListFragment : Fragment() {
 
-    private val listViewModel: ListViewModel by viewModels()
+    private val listViewModel: ListViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

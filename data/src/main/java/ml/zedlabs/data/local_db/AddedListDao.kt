@@ -11,7 +11,7 @@ interface AddedListDao {
     @Query("SELECT * FROM addedlist")
     fun getAll(): Flow<List<AddedList>>
 
-    @Query("SELECT * FROM addedlist WHERE uid IN (:mediaIds)")
+    @Query("SELECT * FROM addedlist WHERE mediaId IN (:mediaIds)")
     suspend fun loadAllByIds(mediaIds: IntArray): List<AddedList>
 
     @Query("SELECT * FROM addedlist WHERE media_name LIKE :name")

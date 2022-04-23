@@ -32,7 +32,7 @@ class AppCommonsRepositoryImpl @Inject constructor(
                     description = it.description,
                     posterPath = it.posterPath,
                 )
-            }
+            }.asReversed()
         }.conflate()
 
     override suspend fun addToUserAddedList(item: AddedList) {
