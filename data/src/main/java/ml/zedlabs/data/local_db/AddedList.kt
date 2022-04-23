@@ -3,6 +3,7 @@ package ml.zedlabs.data.local_db
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import ml.zedlabs.domain.model.common.MediaType
 
 @Entity
 data class AddedList(
@@ -13,4 +14,5 @@ data class AddedList(
     @ColumnInfo(name = "media_name") val title: String?,
     @ColumnInfo(name = "media_desc") val description: String?,
     @ColumnInfo(name = "poster_path") val posterPath: String?,
+    @ColumnInfo(name = "type") val type: MediaType,
 )

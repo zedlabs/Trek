@@ -94,7 +94,8 @@ class MovieDetailsFragment : Fragment() {
                             uid = mediaId,
                             posterPath = posterPath,
                             title = title,
-                            description = description
+                            description = description,
+                            type = type
                         )
                     }
                 )

@@ -90,6 +90,7 @@ class TvDetailsFragment: Fragment() {
                             posterPath = posterPath,
                             title = title,
                             description = description,
+                            type = type,
                         )
                     }
                 )

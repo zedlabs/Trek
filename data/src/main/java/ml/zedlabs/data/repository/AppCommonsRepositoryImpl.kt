@@ -31,6 +31,7 @@ class AppCommonsRepositoryImpl @Inject constructor(
                     title = it.title,
                     description = it.description,
                     posterPath = it.posterPath,
+                    type = it.type,
                 )
             }.asReversed()
         }.conflate()
@@ -43,6 +44,7 @@ class AppCommonsRepositoryImpl @Inject constructor(
                 title = item.title,
                 description = item.description,
                 posterPath = item.posterPath,
+                type = item.type,
             )
         )
     }
