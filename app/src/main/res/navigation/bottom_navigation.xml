@@ -25,7 +25,18 @@
     <fragment
         android:id="@+id/search_bottom"
         android:name="ml.zedlabs.tvtracker.ui.search.SearchFragment"
-        android:label="fragment_search"></fragment>
+        android:label="fragment_search">
+        <action
+            android:id="@+id/search_to_tv_det"
+            app:destination="@id/tv_detail_screen"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"/>
+        <action
+            android:id="@+id/search_to_movie_det"
+            app:destination="@id/movie_detail_screen"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"/>
+    </fragment>
 
     <fragment
         android:id="@+id/list_bottom"
@@ -33,10 +44,14 @@
         android:label="fragment_list">
         <action
             android:id="@+id/list_to_movie_details"
-            app:destination="@id/movie_detail_screen" />
+            app:destination="@id/movie_detail_screen"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/list_to_tv_detail"
-            app:destination="@id/tv_detail_screen" />
+            app:destination="@id/tv_detail_screen"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"/>
     </fragment>
 
     <fragment
