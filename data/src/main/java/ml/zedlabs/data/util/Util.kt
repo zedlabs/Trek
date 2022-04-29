@@ -21,3 +21,5 @@ suspend fun <T: Any> handleRequest(requestFunc: suspend () -> Response<T>): Reso
         return Error(exception)
     }
 }
+
+fun String.createImdbUrlFromImdbMediaId() = "https://www.imdb.com/title/$this/"

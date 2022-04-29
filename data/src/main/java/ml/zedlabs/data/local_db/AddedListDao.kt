@@ -12,10 +12,13 @@ interface AddedListDao {
     fun getAll(): Flow<List<AddedList>>
 
     @Query("SELECT * FROM addedlist WHERE mediaId IN (:mediaIds)")
-    suspend fun loadAllByIds(mediaIds: IntArray): List<AddedList>
+    suspend fun loadAllByIds(mediaIds: IntArray): List<AddedList>?
+
+    @Query("SELECT * FROM addedlist WHERE media_id = :mediaId")
+    suspend fun getById(mediaId: Int): AddedList?
 
     @Query("SELECT * FROM addedlist WHERE media_name LIKE :name")
-    suspend fun findByName(name: String): AddedList
+    suspend fun findByName(name: String): AddedList?
 
     @Insert
     suspend fun insertAll(vararg items: AddedList)

@@ -4,33 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import coil.compose.rememberImagePainter
 import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.domain.model.Resource
 import ml.zedlabs.domain.model.common.AddedList
-import ml.zedlabs.domain.model.movie.MovieDetailResponse
 import ml.zedlabs.tvtracker.ui.common.MovieViewModel
-import ml.zedlabs.tvtracker.ui.common.TvViewModel
 import ml.zedlabs.tvtracker.ui.list.ListViewModel
-import ml.zedlabs.tvtracker.util.appendAsImageUrl
 import ml.zedlabs.tvtracker.util.mapToMediaCommon
 
 /**
@@ -46,7 +32,7 @@ import ml.zedlabs.tvtracker.util.mapToMediaCommon
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
 
-    //    private val detailViewModel: DetailViewModel by viewModels()
+    private val detailCommonViewModel: DetailViewModel by viewModels()
     private val movieViewModel: MovieViewModel by activityViewModels()
     private val listViewModel: ListViewModel by activityViewModels()
 
@@ -83,10 +69,14 @@ class MovieDetailsFragment : Fragment() {
     @Composable
     fun DetailsScreenParentLayout() {
         val movieDetails by movieViewModel.movieDetailState.collectAsState()
-
+        val imdbRating by detailCommonViewModel.imdbRatingState.collectAsState()
         if (movieDetails is Resource.Success) {
             val movieItem = movieDetails.data?.mapToMediaCommon() ?: return
-            DetailsScreenMainLayout(movieItem) {
+            // we want to load the imdb rating once, other it will create a ongoing loop
+            LaunchedEffect(true) {
+                loadImdbRating(movieDetails.data?.imdb_id ?: "")
+            }
+            DetailsScreenMainLayout(movieItem, imdbRating.data ?: 0.0) {
                 // SAM for adding the media to users media list
                 listViewModel.addToUserAddedList(
                     with(movieItem) {
@@ -101,6 +91,10 @@ class MovieDetailsFragment : Fragment() {
                 )
             }
         }
+    }
+
+    private fun loadImdbRating(id: String) {
+       detailCommonViewModel.getImdbRating(id)
     }
 
 }

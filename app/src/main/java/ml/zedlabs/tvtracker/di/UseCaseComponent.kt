@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import ml.zedlabs.domain.repository.AppCommonsRepository
 import ml.zedlabs.domain.repository.MovieRepository
 import ml.zedlabs.domain.repository.TvRepository
+import ml.zedlabs.domain.repository.WebParsingRepository
 import ml.zedlabs.domain.usecases.*
 import javax.inject.Singleton
 
@@ -68,6 +69,14 @@ object UseCaseComponent {
         appCommonsRepository: AppCommonsRepository
     ) : GetUserAddedListUseCase {
         return GetUserAddedListUseCase(appCommonsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWebScrapingDataUseCase(
+        webParsingRepository: WebParsingRepository
+    ) : GetWebScrapingDataUseCase {
+        return GetWebScrapingDataUseCase(webParsingRepository)
     }
 
 }

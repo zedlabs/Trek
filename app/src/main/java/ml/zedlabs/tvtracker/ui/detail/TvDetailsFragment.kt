@@ -4,31 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import coil.compose.rememberImagePainter
 import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.domain.model.Resource
 import ml.zedlabs.domain.model.common.AddedList
-import ml.zedlabs.domain.model.tv.TvDetailResponse
 import ml.zedlabs.tvtracker.ui.common.TvViewModel
 import ml.zedlabs.tvtracker.ui.list.ListViewModel
-import ml.zedlabs.tvtracker.util.appendAsImageUrl
 import ml.zedlabs.tvtracker.util.mapToMediaCommon
 
 /**
@@ -45,6 +31,7 @@ import ml.zedlabs.tvtracker.util.mapToMediaCommon
 class TvDetailsFragment: Fragment() {
 
     private val tvViewModel: TvViewModel by activityViewModels()
+    private val detailCommonViewModel: DetailViewModel by activityViewModels()
     private val listViewModel: ListViewModel by activityViewModels()
     private var mediaId = 0
 
@@ -81,7 +68,8 @@ class TvDetailsFragment: Fragment() {
         val tvDetails by tvViewModel.tvDetailState.collectAsState()
         if(tvDetails is Resource.Success) {
             val tvItem = tvDetails.data?.mapToMediaCommon() ?: return
-            DetailsScreenMainLayout(tvItem) {
+            // rating currently 0 will change once getExternal Ids have been implemented
+            DetailsScreenMainLayout(tvItem, 0.0) {
                 // SAM for adding the media to users media list
                 listViewModel.addToUserAddedList(
                     with(tvItem) {

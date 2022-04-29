@@ -18,10 +18,12 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import ml.zedlabs.domain.model.common.MediaDetailCommon
 import ml.zedlabs.tvtracker.util.appendAsImageUrl
+import ml.zedlabs.tvtracker.util.asRating
 
 @Composable
 fun DetailsScreenMainLayout(
     itemDetails: MediaDetailCommon?,
+    imdbRating: Double,
     addToDb: () -> Unit,
 ) {
     itemDetails ?: return
@@ -76,6 +78,11 @@ fun DetailsScreenMainLayout(
         Text(
             text = "🌟 Ratings: ${itemDetails.formattedRating}"
         )
+        if(imdbRating != 0.0) {
+            Text(
+                text = "🌟 Imdb Ratings: ${imdbRating.asRating()}"
+            )
+        }
         Text(
             text = itemDetails.description ?: ""
         )

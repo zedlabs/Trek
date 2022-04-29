@@ -16,13 +16,19 @@ import ml.zedlabs.domain.model.movie.MovieDetailResponse
 import ml.zedlabs.domain.model.movie.MovieListResponse
 import ml.zedlabs.domain.usecases.GetMovieDetailUseCase
 import ml.zedlabs.domain.usecases.GetMovieListUseCase
+import ml.zedlabs.domain.usecases.GetWebScrapingDataUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class MovieViewModel @Inject constructor(
     val getMovieListUseCase: GetMovieListUseCase,
     val getMovieDetailUseCase: GetMovieDetailUseCase,
+    val getWebScrapingDataUseCase: GetWebScrapingDataUseCase,
 ) : ViewModel() {
+
+    private val _imdbRatingState =
+        MutableStateFlow<Resource<Double>>(Resource.Uninitialised())
+    val imdbRatingState = _imdbRatingState.asStateFlow()
 
     private val _topRatedMovieListState =
         MutableStateFlow<Resource<MovieListResponse>>(Uninitialised())
@@ -57,6 +63,12 @@ class MovieViewModel @Inject constructor(
 
     private val _recommendedMovieListState = MutableStateFlow<Resource<MovieListResponse>>(Uninitialised())
     val recommendedMovieListState = _recommendedMovieListState.asStateFlow()
+
+    fun getImdbRating(imdbId: String) {
+        viewModelScope.launch {
+            _imdbRatingState.value = getWebScrapingDataUseCase.getImdbRating(imdbId = imdbId)
+        }
+    }
 
     // we update different state flow based on the selected
     // @link{MediaSortingParam}, as all the flows are collected

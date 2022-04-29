@@ -36,7 +36,10 @@ class AppCommonsRepositoryImpl @Inject constructor(
             }.asReversed()
         }.conflate()
 
+    // can add a return value sealed result here to indicate if the object has been inserted or not
     override suspend fun addToUserAddedList(item: AddedList) {
+        // return as item already exists
+        if (addedListDao.getById(item.uid) != null) return
         // map to data model; ideally there should be mapper functions for this purpose
         addedListDao.insertAll(
             ml.zedlabs.data.local_db.AddedList(

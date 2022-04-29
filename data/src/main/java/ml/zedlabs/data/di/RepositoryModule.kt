@@ -15,9 +15,11 @@ import ml.zedlabs.data.network.TvApi
 import ml.zedlabs.data.repository.AppCommonsRepositoryImpl
 import ml.zedlabs.data.repository.MovieRepositoryImpl
 import ml.zedlabs.data.repository.TvRepositoryImpl
+import ml.zedlabs.data.repository.WebParsingRepositoryImpl
 import ml.zedlabs.domain.repository.AppCommonsRepository
 import ml.zedlabs.domain.repository.MovieRepository
 import ml.zedlabs.domain.repository.TvRepository
+import ml.zedlabs.domain.repository.WebParsingRepository
 import javax.inject.Singleton
 
 @Module
@@ -69,6 +71,13 @@ object RepositoryModule {
             jsonApi,
             addedListDao
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideWebParsingRepository(
+    ): WebParsingRepository {
+        return WebParsingRepositoryImpl()
     }
 
 }

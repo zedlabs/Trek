@@ -5,16 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.IconToggleButton
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Switch
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
@@ -37,7 +32,7 @@ class ProfileFragment : BaseAndroidFragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 TvTrackerTheme() {
-                    ProfileScreenParentLayout()
+                    TabLayoutTest()
                 }
             }
         }
@@ -65,4 +60,63 @@ class ProfileFragment : BaseAndroidFragment() {
             )
         }
     }
+
+    enum class Tabs(val position: Int){
+        TAB1(0),
+        TAB2(1),
+        TAB3(2),
+        TAB4(3),
+    }
+    @Composable
+    fun TabLayoutTest() {
+        var tabIndex by remember {
+            mutableStateOf(Tabs.TAB1)
+        }
+        val tabTitles = listOf( "TAB1",
+            "TAB2",
+            "TAB3",
+            "TAB4",
+        )
+
+        TabRow(
+            selectedTabIndex = tabIndex.position
+        ) {
+            tabTitles.forEachIndexed { index: Int, s: String ->
+                Tab(selected = tabIndex.position == index,
+                    onClick = {
+                    Toast.makeText(context, "tab click! $index", Toast.LENGTH_SHORT).show()
+                },
+                    text = {
+                        Text(text = "Title")
+                    }
+                )
+            }
+        }
+
+        // can have different composables here based on the selected selected tab index
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
