@@ -1,6 +1,7 @@
 package ml.zedlabs.domain.repository
 
 import ml.zedlabs.domain.model.Resource
+import ml.zedlabs.domain.model.common.TvExternalIdResponse
 import ml.zedlabs.domain.model.common.UserReviewResponse
 import ml.zedlabs.domain.model.tv.TvDetailResponse
 import ml.zedlabs.domain.model.tv.TvListResponse
@@ -17,6 +18,8 @@ interface TvRepository {
     suspend fun getUserTvReviews(tvId: Int, page: Int) : Resource<UserReviewResponse>
 
     suspend fun getTvSeasonDetails(tvId: Int, seasonNumber: Int) : Resource<TvSeasonDetails>
+
+    suspend fun getTvExternalIds(tvId: Int) : Resource<TvExternalIdResponse>
 
     // - - - details
 

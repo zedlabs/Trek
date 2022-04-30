@@ -1,5 +1,6 @@
 package ml.zedlabs.data.network
 
+import ml.zedlabs.domain.model.common.TvExternalIdResponse
 import ml.zedlabs.domain.model.common.UserReviewResponse
 import ml.zedlabs.domain.model.movie.MovieListResponse
 import ml.zedlabs.domain.model.tv.TvDetailResponse
@@ -45,5 +46,11 @@ interface TvApi {
         @Query("api_key") api_key: String,
         @Query("page") page: Int,
     ): Response<UserReviewResponse>
+
+    @GET("/3/tv/{tv_id}/external_ids")
+    suspend fun getTvExternalIds(
+        @Path("tv_id") tv_id: Int,
+        @Query("api_key") api_key: String,
+    ): Response<TvExternalIdResponse>
 
 }

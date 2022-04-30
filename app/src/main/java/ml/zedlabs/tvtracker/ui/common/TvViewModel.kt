@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import ml.zedlabs.domain.model.Resource
 import ml.zedlabs.domain.model.Resource.*
 import ml.zedlabs.domain.model.common.MovieSortingParam
+import ml.zedlabs.domain.model.common.TvExternalIdResponse
 import ml.zedlabs.domain.model.common.TvSortingParam
 import ml.zedlabs.domain.model.common.UserReviewResponse
 import ml.zedlabs.domain.model.tv.TvDetailResponse
@@ -46,6 +47,10 @@ class TvViewModel @Inject constructor(
 
     private val _tvSeasonDetailsState = MutableStateFlow<Resource<TvSeasonDetails>>(Uninitialised())
     val tvSeasonDetailsState = _tvSeasonDetailsState.asStateFlow()
+
+    private val _tvExternalIdsState =
+        MutableStateFlow<Resource<TvExternalIdResponse>>(Uninitialised())
+    val tvExternalIdsState = _tvExternalIdsState.asStateFlow()
 
     // we update different state flow based on the selected
     // @link{MediaSortingParam}, as all the flows are collected
@@ -106,4 +111,10 @@ class TvViewModel @Inject constructor(
         }
     }
 
+    fun getTvExternalIds(tvId: Int) {
+        _tvExternalIdsState.value = Loading()
+        viewModelScope.launch {
+            _tvExternalIdsState.value = getTvDetailsUseCase.getTvExternalIds(tvId)
+        }
+    }
 }

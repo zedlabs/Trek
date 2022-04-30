@@ -4,6 +4,7 @@ import ml.zedlabs.data.BuildConfig
 import ml.zedlabs.data.network.TvApi
 import ml.zedlabs.data.util.handleRequest
 import ml.zedlabs.domain.model.Resource
+import ml.zedlabs.domain.model.common.TvExternalIdResponse
 import ml.zedlabs.domain.model.common.UserReviewResponse
 import ml.zedlabs.domain.model.tv.TvDetailResponse
 import ml.zedlabs.domain.model.tv.TvListResponse
@@ -63,4 +64,14 @@ class TvRepositoryImpl @Inject constructor(
                 )
         }
     }
+
+    override suspend fun getTvExternalIds(tvId: Int): Resource<TvExternalIdResponse> {
+        return handleRequest {
+            tvApiService.getTvExternalIds(
+                tv_id = tvId,
+                api_key = BuildConfig.APIKEY,
+            )
+        }
+    }
+
 }

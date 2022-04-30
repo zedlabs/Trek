@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.domain.model.Resource
 import ml.zedlabs.domain.model.common.AddedList
@@ -34,7 +35,7 @@ import ml.zedlabs.tvtracker.util.mapToMediaCommon
 class TvDetailsFragment : BaseAndroidFragment() {
 
     private val tvViewModel: TvViewModel by activityViewModels()
-    private val detailCommonViewModel: DetailViewModel by activityViewModels()
+    private val detailCommonViewModel: DetailViewModel by viewModels()
     private val listViewModel: ListViewModel by activityViewModels()
     private var mediaId = 0
 
@@ -64,6 +65,7 @@ class TvDetailsFragment : BaseAndroidFragment() {
 
     private fun loadDataFromNetwork() {
         tvViewModel.getTvShowDetails(mediaId)
+        tvViewModel.getTvExternalIds(mediaId)
     }
 
     /**
@@ -73,10 +75,18 @@ class TvDetailsFragment : BaseAndroidFragment() {
     @Composable
     fun DetailsScreenParentLayout() {
         val tvDetails by tvViewModel.tvDetailState.collectAsState()
+        val externalId by tvViewModel.tvExternalIdsState.collectAsState()
+        val imdbRating by detailCommonViewModel.imdbRatingState.collectAsState()
+        if (externalId is Resource.Success) {
+            LaunchedEffect(true) {
+                loadImdbRating(externalId.data?.imdb_id ?: "")
+            }
+        }
+
         if (tvDetails is Resource.Success) {
             val tvItem = tvDetails.data?.mapToMediaCommon() ?: return
             // rating currently 0 will change once getExternal Ids have been implemented
-            DetailsScreenMainLayout(tvItem, 0.0) {
+            DetailsScreenMainLayout(tvItem, imdbRating.data ?: 0.0) {
                 // SAM for adding the media to users media list
                 listViewModel.addToUserAddedList(
                     with(tvItem) {
@@ -92,6 +102,10 @@ class TvDetailsFragment : BaseAndroidFragment() {
             }
         }
 
+    }
+
+    private fun loadImdbRating(id: String) {
+        detailCommonViewModel.getImdbRating(id)
     }
 
 }
