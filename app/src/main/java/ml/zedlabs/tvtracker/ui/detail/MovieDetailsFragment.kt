@@ -15,8 +15,11 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.domain.model.Resource
 import ml.zedlabs.domain.model.common.AddedList
+import ml.zedlabs.tvtracker.base.BaseAndroidFragment
 import ml.zedlabs.tvtracker.ui.common.MovieViewModel
 import ml.zedlabs.tvtracker.ui.list.ListViewModel
+import ml.zedlabs.tvtracker.ui.theme.TvTrackerTheme
+import ml.zedlabs.tvtracker.util.Constants
 import ml.zedlabs.tvtracker.util.mapToMediaCommon
 
 /**
@@ -30,7 +33,7 @@ import ml.zedlabs.tvtracker.util.mapToMediaCommon
  * receives data through bundle
  */
 @AndroidEntryPoint
-class MovieDetailsFragment : Fragment() {
+class MovieDetailsFragment : BaseAndroidFragment() {
 
     private val detailCommonViewModel: DetailViewModel by viewModels()
     private val movieViewModel: MovieViewModel by activityViewModels()
@@ -45,7 +48,11 @@ class MovieDetailsFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                DetailsScreenParentLayout()
+                TvTrackerTheme(
+                    darkTheme = readBooleanFromSharedPreference(Constants.IS_DARK_THEME_ENABLED)
+                ) {
+                    DetailsScreenParentLayout()
+                }
             }
         }
     }
@@ -94,7 +101,7 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun loadImdbRating(id: String) {
-       detailCommonViewModel.getImdbRating(id)
+        detailCommonViewModel.getImdbRating(id)
     }
 
 }

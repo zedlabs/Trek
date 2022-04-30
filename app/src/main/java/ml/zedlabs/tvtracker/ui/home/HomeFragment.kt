@@ -33,6 +33,7 @@ import ml.zedlabs.domain.model.movie.MovieResult
 import ml.zedlabs.domain.model.tv.TvListResponse
 import ml.zedlabs.domain.model.tv.TvResult
 import ml.zedlabs.tvtracker.R
+import ml.zedlabs.tvtracker.base.BaseAndroidFragment
 import ml.zedlabs.tvtracker.ui.common.MovieViewModel
 import ml.zedlabs.tvtracker.ui.common.TvViewModel
 import ml.zedlabs.tvtracker.ui.theme.TvTrackerTheme
@@ -48,7 +49,7 @@ import ml.zedlabs.tvtracker.util.appendAsImageUrl
  * in the bottom navigation layout
  */
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : BaseAndroidFragment() {
 
     private val movieViewModel: MovieViewModel by activityViewModels()
     private val tvViewModel: TvViewModel by activityViewModels()
@@ -70,10 +71,11 @@ class HomeFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                TvTrackerTheme() {
+                TvTrackerTheme(
+                    darkTheme = readBooleanFromSharedPreference(Constants.IS_DARK_THEME_ENABLED)
+                ) {
                     HomeScreenParentLayout()
                 }
-
             }
         }
     }

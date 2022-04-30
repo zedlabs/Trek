@@ -4,31 +4,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -36,14 +32,15 @@ import coil.compose.rememberImagePainter
 import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.domain.model.common.MediaType
 import ml.zedlabs.domain.model.common.SearchListItem
-import ml.zedlabs.domain.model.movie.MovieDetailResponse
 import ml.zedlabs.tvtracker.R
+import ml.zedlabs.tvtracker.base.BaseAndroidFragment
+import ml.zedlabs.tvtracker.ui.theme.TvTrackerTheme
 import ml.zedlabs.tvtracker.util.Constants
 import ml.zedlabs.tvtracker.util.appendAsImageUrl
 import java.util.*
 
 @AndroidEntryPoint
-class SearchFragment : Fragment() {
+class SearchFragment : BaseAndroidFragment() {
 
     val searchViewModel: SearchViewModel by viewModels()
     override fun onCreateView(
@@ -53,7 +50,11 @@ class SearchFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                SearchScreenParentLayout()
+                TvTrackerTheme(
+                    darkTheme = readBooleanFromSharedPreference(Constants.IS_DARK_THEME_ENABLED)
+                ) {
+                    SearchScreenParentLayout()
+                }
             }
         }
     }
@@ -142,8 +143,8 @@ class SearchFragment : Fragment() {
         val bundle = bundleOf("mediaId" to mediaId)
         with(view?.findNavController()) {
             // exit out if the nav controller instance cannot be found
-            this?: return
-            when(mediaType) {
+            this ?: return
+            when (mediaType) {
                 MediaType.MOVIE -> navigate(R.id.search_to_movie_det, bundle)
                 MediaType.TV -> navigate(R.id.search_to_tv_det, bundle)
 

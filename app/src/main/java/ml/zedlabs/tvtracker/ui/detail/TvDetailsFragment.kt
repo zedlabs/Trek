@@ -13,8 +13,11 @@ import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.domain.model.Resource
 import ml.zedlabs.domain.model.common.AddedList
+import ml.zedlabs.tvtracker.base.BaseAndroidFragment
 import ml.zedlabs.tvtracker.ui.common.TvViewModel
 import ml.zedlabs.tvtracker.ui.list.ListViewModel
+import ml.zedlabs.tvtracker.ui.theme.TvTrackerTheme
+import ml.zedlabs.tvtracker.util.Constants
 import ml.zedlabs.tvtracker.util.mapToMediaCommon
 
 /**
@@ -28,7 +31,7 @@ import ml.zedlabs.tvtracker.util.mapToMediaCommon
  * receives data through bundle
  */
 @AndroidEntryPoint
-class TvDetailsFragment: Fragment() {
+class TvDetailsFragment : BaseAndroidFragment() {
 
     private val tvViewModel: TvViewModel by activityViewModels()
     private val detailCommonViewModel: DetailViewModel by activityViewModels()
@@ -42,7 +45,11 @@ class TvDetailsFragment: Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                DetailsScreenParentLayout()
+                TvTrackerTheme(
+                    darkTheme = readBooleanFromSharedPreference(Constants.IS_DARK_THEME_ENABLED)
+                ) {
+                    DetailsScreenParentLayout()
+                }
             }
         }
     }
@@ -66,7 +73,7 @@ class TvDetailsFragment: Fragment() {
     @Composable
     fun DetailsScreenParentLayout() {
         val tvDetails by tvViewModel.tvDetailState.collectAsState()
-        if(tvDetails is Resource.Success) {
+        if (tvDetails is Resource.Success) {
             val tvItem = tvDetails.data?.mapToMediaCommon() ?: return
             // rating currently 0 will change once getExternal Ids have been implemented
             DetailsScreenMainLayout(tvItem, 0.0) {

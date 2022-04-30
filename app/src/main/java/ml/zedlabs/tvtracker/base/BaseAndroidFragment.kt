@@ -15,37 +15,37 @@ open class BaseAndroidFragment: Fragment() {
         sharedPref = context?.getSharedPreferences(getString(R.string.pref_file_name), Context.MODE_PRIVATE)
     }
 
-    open fun writeLongToSharedPreferenceFile(key: String, value: Long) {
+    open fun writeLongToSharedPreference(key: String, value: Long) {
         sharedPref?.edit()?.let {
             it.putLong(key, value)
             it.apply()
         }
     }
 
-    open fun writeStringToSharedPreferenceFile(key: String, value: String) {
+    open fun writeStringToSharedPreference(key: String, value: String) {
         sharedPref?.edit()?.let {
             it.putString(key, value)
             it.apply()
         }
     }
 
-    open fun writeBooleanToSharedPreferenceFile(key: String, value: Boolean) {
+    open fun writeBooleanToSharedPreference(key: String, value: Boolean) {
         sharedPref?.edit()?.let {
             it.putBoolean(key, value)
             it.apply()
         }
     }
 
-    open fun readLongFromSharedPreferenceFile(key: String, defaultValue: Long = 0) : Long {
+    open fun readLongFromSharedPreference(key: String, defaultValue: Long = 0) : Long {
         return sharedPref?.getLong(key, defaultValue) ?: defaultValue
     }
 
-    open fun readStringFromSharedPreferenceFile(key: String, defaultValue: String = "") : String {
+    open fun readStringFromSharedPreference(key: String, defaultValue: String = "") : String {
         return sharedPref?.getString(key, defaultValue) ?: defaultValue
     }
 
 
-    open fun readBooleanFromSharedPreferenceFile(key: String, defaultValue: Boolean = false) : Boolean {
+    open fun readBooleanFromSharedPreference(key: String, defaultValue: Boolean = false) : Boolean {
         return sharedPref?.getBoolean(key, defaultValue) ?: defaultValue
     }
 }

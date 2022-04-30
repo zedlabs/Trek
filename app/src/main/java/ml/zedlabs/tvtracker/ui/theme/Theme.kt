@@ -27,8 +27,15 @@ private val LightColorPalette = lightColors(
     */
 )
 
+/**
+ * Can have an enum with multiple possible themes here as well
+ * instead on light and dark only
+ */
 @Composable
-fun TvTrackerTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
+fun TvTrackerTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {

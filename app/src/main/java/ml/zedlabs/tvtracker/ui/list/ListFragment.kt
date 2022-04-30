@@ -24,18 +24,19 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import coil.compose.rememberImagePainter
 import dagger.hilt.android.AndroidEntryPoint
 import ml.zedlabs.domain.model.common.AddedList
 import ml.zedlabs.domain.model.common.MediaType
 import ml.zedlabs.tvtracker.R
+import ml.zedlabs.tvtracker.base.BaseAndroidFragment
+import ml.zedlabs.tvtracker.ui.theme.TvTrackerTheme
+import ml.zedlabs.tvtracker.util.Constants
 import ml.zedlabs.tvtracker.util.appendAsImageUrl
-import kotlin.random.Random
 
 @AndroidEntryPoint
-class ListFragment : Fragment() {
+class ListFragment : BaseAndroidFragment() {
 
     private val listViewModel: ListViewModel by activityViewModels()
     override fun onCreateView(
@@ -45,7 +46,11 @@ class ListFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                ListScreenParentLayout()
+                TvTrackerTheme(
+                    darkTheme = readBooleanFromSharedPreference(Constants.IS_DARK_THEME_ENABLED)
+                ) {
+                    ListScreenParentLayout()
+                }
             }
         }
     }
@@ -56,11 +61,11 @@ class ListFragment : Fragment() {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            Row (
+            Row(
                 modifier = Modifier
                     .padding(20.dp)
                     .align(Alignment.CenterHorizontally),
-                    ){
+            ) {
                 Button(
                     modifier = Modifier
                         .padding(20.dp),
@@ -116,7 +121,7 @@ class ListFragment : Fragment() {
                 .width(163.dp)
                 .height(245.dp)
                 .clickable {
-                   onItemClick(mediaId = mediaId, mediaType = type)
+                    onItemClick(mediaId = mediaId, mediaType = type)
                 }
         ) {
             Box {
@@ -139,14 +144,15 @@ class ListFragment : Fragment() {
             }
         }
     }
+
     private fun onItemClick(mediaId: Int, mediaType: MediaType) {
         val bundle = bundleOf("mediaId" to mediaId)
         with(view?.findNavController()) {
             // exit out if the nav controller instance cannot be found
-            this?: return
-            when(mediaType) {
+            this ?: return
+            when (mediaType) {
                 MediaType.MOVIE -> navigate(R.id.list_to_movie_details, bundle)
-                MediaType.TV , MediaType.ANIME-> navigate(R.id.list_to_tv_detail, bundle)
+                MediaType.TV, MediaType.ANIME -> navigate(R.id.list_to_tv_detail, bundle)
 
             }
         }
