@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,8 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Typeface
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
@@ -65,7 +63,7 @@ fun DetailsScreenMainLayout(
                         )
                     )
                     .fillMaxWidth()
-                    .padding(10.dp),
+                    .padding(15.dp),
                 style = Typography.h1,
             )
         }
@@ -74,19 +72,22 @@ fun DetailsScreenMainLayout(
                 addToDb.invoke()
             }
         ) {
-            Text(text = "Add to Your List")
+            Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
+                Text(text = "Add to Your List")
+            }
         }
         Text(
             text = "Vote Count: : ${itemDetails.formattedVoteCount}",
             style = Typography.body1,
         )
         Text(
-            text = "🌟 Ratings: ${itemDetails.formattedRating}",
+            text = "Ratings: ${itemDetails.formattedRating}",
             style = Typography.body1,
+            fontSize = 30.sp
         )
         if (imdbRating != 0.0) {
             Text(
-                text = "🌟 Imdb Ratings: ${imdbRating.asRating()}",
+                text = "Imdb Ratings: ${imdbRating.asRating()}",
                 style = Typography.body1,
             )
         }

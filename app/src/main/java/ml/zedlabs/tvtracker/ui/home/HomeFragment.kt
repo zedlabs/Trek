@@ -187,8 +187,8 @@ class HomeFragment : BaseAndroidFragment() {
             LazyRow {
                 itemsIndexed(items = items) { _, item ->
                     HomeScreenListItem(
-                        item.name,
-                        item.poster_path,
+                        item.name ?: "",
+                        item.poster_path ?: "",
                         item.id,
                         ::onTvItemClick
                     )

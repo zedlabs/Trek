@@ -47,7 +47,7 @@ class ProfileFragment : BaseAndroidFragment() {
     @Composable
     fun ProfileScreenParentLayout() {
 
-        val themeIconToggleState = rememberSaveable { mutableStateOf(false) }
+        val themeIconToggleState = rememberSaveable { mutableStateOf(true) }
 
         Row {
             Text(
